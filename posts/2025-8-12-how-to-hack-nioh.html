@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <title>NitoTech | How to Hack Nioh</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <script src="../blogs.js"></script>
+    <meta name="title" content="How to Hack Nioh">
+    <meta name="description" content="Hacking Nioh Writeup">
+    <meta name="date" content="Aug 12, 2025">
+    <body>
+        <div class="header poppins-regular">
+            <h1>NitoTech</h1>
+            <p>Game Vulnerability Researcher | Anti-Cheat Enthusiast</p>
+        </div>
+
+        <div class="navbar">
+            <a href="../index.html">Home</a>
+            <a href="../posts.html">Posts</a>
+            <a href="#projects">Projects</a>
+            <a href="#contact" class="right">Contact</a>
+        </div>
+
+        <div class="row">
+            <div class="blog-side">
+                <h2>Check out my <br>other Posts!</h2>
+                <h3>My Favorite Projects</h3>
+                <p>Here are some of my favorite projects I've worked on</p>
+                <div class="mini-posts" style="height:60px;"><a href="./posts/how-to-hack-nioh.html">Nioh Hack</a></div><br>
+                <div class="mini-posts" style="height:60px;"><a href="#SMAT">Static Malware Analysis Tool</a></div><br>
+                <div class="mini-posts" style="height:60px;"><a href="#TFDReactApp">TFD React App</a></div>
+            </div>
+            <div class="blog-main">
+                <h2>How to Hack Nioh</h2>
+                <h5>Aug 12, 2025 | Hacking Nioh Writeup</h5>
+                <hr>
+                <h3>What is Nioh?</h3>
+                    <p>Nioh is a game based in 16th century Japan, where you play as an Englishman who washed up on the shores of Japan and became a Samurai. You fight alongside other heros while attempting to take down the sorcerer Edward Kelley who has also brought forth the emergence of yokai. </p>
+                    <p>The game was released in 2017, it was developed by Team Ninja, and published by Koei Tecmo.</p>
+                <h3>Initial Investigation</h3>
+                    <p>
+                        The first thing I usually check is what <span class="hover-word">architecture</span> the game is ran in and what the main process name is. Though maybe a rudementary approach, 
+                        I attach to the game in Cheat Engine, taking note of the game's process name. Which in this case is, <code>nioh.exe</code>. I usually figure out the game's architecture after
+                        scanning for a value so lets go ahead and get into scanning for our first address! 
+                    </p>
+                    <img src="../images/stock-code.jpg">
+                    <p>
+                        Generally I would start by scanning for my health value to start, but during the intial phases of attempting to hack Nioh, I didn't know they offered a setting to display your health value haha.
+                        So in this case I started by running an initial scan on our Amrita (The games xp currency), when you load into the first map it shows as 500. So I plug 500 into the value and scan. This comes back
+                        with a lot of results. So I run over to a nearby shrine that we can loot for some more amrita, plug in our updated value, scan again, and boom, now we have a handful of address left(< 10). I take note during this time that our addresses are showing as 
+                        <code>x64</code> addresses, so now I know what architecture the game runs in!
+                    </p>
+
+                    <p>
+                        Something I immediately notice is that one of the values is showing as green without the addresses that were returned. This indicates that it is a <span class="hover-word">static address</span>! 
+                        This is super exciting, finding a static address eliminates a lot of work from our end, and as long as it sticks between different instances of launching the game means we'll always have access to our Amrita address. 
+                        Now we can change our Amrita value at will to whatever we want! Make sure to double click on the address so that you can add it to your address bar below.
+                    </p>
+
+                    <p>
+                        So I plug in a new value into the value of the address that we just saved, we'll do 1000, that way it's not too big of a change. Hmm that's weird, my entire screen just went black?
+                        I initially fear that I'm getting banned and <code>alt + f4</code> from the game, in reality, it's a single player game (with a slight online feature, but nothing where you're playing with another player)
+                        , and I was offline on steam so I wasn't at risk of anything. Once I load back into the game, I notice my Amrita is back at what it was prior to changing my value. So this time, I try again,
+                        but I let the black screen continue and then I see that it shows a loading icon and then puts me back at the menu screen.
+                    </p>
+
+                    <p>
+                        A quick google search taught me that this is Nioh's (small but there) built-in <span class="hover-word">anti-cheat</span>. Disabling us from changing values from within the game, but we are game hackers, we can't just accept that.
+                        So with a little more digging through forums and looking at my screen pondering what to try, I notice that while within the menu screen I can still see my Amrita value. That's weird, I'm not
+                        even loaded into the game, why is my Amrita still there? Can I change the value? I can! That's cool, lets see what happens when I load in. Woah! It stuck, I successfully changed my Amrita value from
+                        562 to 1000 and I was able to spend the Amrita as well!!!
+                    </p>
+
+                <h3>Finding More Values</h3>
+            </div>
+        </div>
+    </body>
+</html>

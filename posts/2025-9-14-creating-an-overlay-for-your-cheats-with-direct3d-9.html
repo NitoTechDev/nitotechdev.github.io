@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <title>NitoTech | Creating an Overlay with Direct3D 9</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <script src="../blogs.js"></script>
+    <body>
+        <div class="header poppins-regular">
+            <h1>NitoTech</h1>
+            <p>Game Vulnerability Researcher | Anti-Cheat Enthusiast</p>
+        </div>
+
+        <div class="navbar">
+            <a href="../index.html">Home</a>
+            <a href="../posts.html">Posts</a>
+            <a href="#projects">Projects</a>
+            <a href="#contact" class="right">Contact</a>
+        </div>
+
+        <div class="row">
+            <div class="blog-side">
+                <h2>Check out my <br>other Posts!</h2>
+                <h3>My Favorite Projects</h3>
+                <p>Here are some of my favorite projects I've worked on</p>
+                <div class="mini-posts" style="height:60px;"><a href="./posts/how-to-hack-nioh.html">Nioh Hack</a></div><br>
+                <div class="mini-posts" style="height:60px;"><a href="#SMAT">Static Malware Analysis Tool</a></div><br>
+                <div class="mini-posts" style="height:60px;"><a href="#TFDReactApp">TFD React App</a></div>
+            </div>
+            <div class="blog-main">
+                <h2>Creating an Overlay for Your Cheats with Direct3D 9</h2>
+                <h5>Sep 14, 2025 | Direct3D 9 Overlay Writeup</h5>
+                <hr>
+                <h3>Why create an overlay for your cheat?</h3>
+                    <p>What's the purpose of adding an overlay to your cheat? That's the question I asked myself when first learning about adding an overlay to a cheat I was creating for Skyrim.</p>
+                    <p>Overlays can help the cheat developer as well as potential users of a cheat keep up with specific values or toggled cheats. Allowing for more clarity on how your hack operates and it's capabilities.</p>
+                
+                <h3>What is required to create an overlay?</h3>
+                    <p>
+                        Things you need:
+                    </p>
+                    <ul>
+                        <li>2010 Direct3D 9 SDK</li>
+                        <li>IDE that is setup for Direct3D includes and libraries</li>
+                        <li>Game that uses Direct3D 9</li>
+                        <li>A DLL that you plan to inject into the game</li>
+                    </ul>
+                    
+                <h3>Downloading the SDK</h3>
+                    <p>You can download the SDK from here: <a href="https://www.microsoft.com/en-us/download/details.aspx?id=6812">Microsoft legacy SDK download</a></p>
+                    <p>It has already reached it's End of Life and is no longer supported. If you run into any issues installing the SDK it's because you already have a version of it installed.</p>
+                    <p>You'll need to uninstall your current version and run the installer again so you can gaurentee you have DirectX 9 installed which is included with this installer</p>
+
+                <h3>Setting up your IDE</h3>
+                    <p>Within your IDE of choice (I use Visual Studio, so will give instructions based on that), <br>you can right click on your solution and go to <strong>properties</strong></p>
+                    <p>Navigate to <strong>VC++ Directories</strong>, then edit your <strong>Include Directories</strong> to be (ENTER THIS AT A LATER TIME)</p>
+                    <p>Then within that same page, you'll edit your <strong>Library Directories</strong> to be (ENTER THIS AT A LATER TIME)</p>
+                    <p>Afterwards you can press <strong>apply</strong>, then press <strong>ok</strong>, and your IDE will be setup to include the Direct3D and DirectX includes and libraries!</p>
+                    <br>
+                    <p><strong>These instructions assume you have a solution created for your cheat already.</strong></p>
+            </div>
+        </div>
+    </body>
+</html>
