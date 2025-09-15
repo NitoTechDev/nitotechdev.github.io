@@ -3,18 +3,18 @@
 
 // As well, without making a Node.JS environment at home I'll have to manually input everything for now.
 const posts = [
+    // {
+    //     "title": "How to Hack Nioh",
+    //     "description": "Hacking Nioh Writeup",
+    //     "date": "Aug 12, 2025",
+    //     "link": "./posts/2025-8-12-how-to-hack-nioh.html"
+    // },
     {
-        "title": "How to Hack Nioh",
-        "description": "Hacking Nioh Writeup",
-        "date": "Aug 12, 2025",
-        "link": "./posts/2025-8-12-how-to-hack-nioh.html"
-    },
-
-    {
-        "title": "Add an Overlay to Your Cheats - Direct3D 9",
-        "description": "Direct3D 9 Overlay Writeup",
+        "title": "Creating an Overlay with Direct3D 9 (Concepts)",
+        "description": "Direct3D 9 Overlay Writeup (Concept)",
         "date": "Sep 14, 2025",
-        "link": "./posts/2025-9-14-creating-an-overlay-for-your-cheats-with-direct3d-9.html"
+        "link": "./posts/2025-9-14-creating-an-overlay-for-your-cheats-with-direct3d-9.html",
+        "image": "./images/D3D9OverlayConceptsLogo.PNG"
     }
 ];
 
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
         blogPostImg.className = "big-posts-img";
 
         const blogPhoto = document.createElement("img");
-        blogPhoto.setAttribute("src", "./images/stock-code.jpg")
+        blogPhoto.setAttribute("src", posts[post].image);
         blogPostImg.append(blogPhoto);
 
         blogPost.append(blogPostTitle);

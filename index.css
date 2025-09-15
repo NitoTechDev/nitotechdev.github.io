@@ -89,6 +89,10 @@ body {
     padding: 20px;
 }
 
+.blog-main h2 {
+    margin-top: 30px;
+}
+
 .blog-main h3 {
     margin-top: 30px;
 }
@@ -195,12 +199,28 @@ body {
     max-width: 500px;
 }
 
+pre {
+  background-color: #f4f4f4; /* Light gray background */
+  padding: 1em; /* Padding around the code */
+  border: 1px solid #ddd; /* Light gray border */
+  border-radius: 5px; /* Rounded corners */
+  overflow: auto; /* Adds scrollbar if content overflows */
+  font-family: 'Monaco', 'Consolas', monospace; /* Monospaced font */
+  font-size: 0.9em; /* Slightly smaller font size */
+  line-height: 1.4; /* Line height for better readability */
+  max-width: 1000px;
+}
+
 code {
+  color: #333; /* Darker text color */
+}
+
+/* code {
     background-color: #cfcfcf;
     border: 1px solid #333;
     border-radius: 5px;
     padding: 1px;
-}
+} */
 
 /* Responsive layout - when the screen is less than 1150px wide, change the flex width for both the blog side and blog main to adjust for words being too close */
 @media screen and (max-width: 1150px) {
