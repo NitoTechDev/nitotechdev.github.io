@@ -3,11 +3,11 @@
     <title>NitoTech | Creating an Overlay with Direct3D 9 (Concepts)</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../index.css">
+    <link rel="stylesheet" href="../../index.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
-    <script src="../blogs.js"></script>
+    <script src="../../blog.js"></script>
     <body>
         <div class="header poppins-regular">
             <h1>NitoTech</h1>
@@ -15,10 +15,9 @@
         </div>
 
         <div class="navbar">
-            <a href="../index.html">Home</a>
-            <a href="../posts.html">Posts</a>
-            <a href="#projects">Projects</a>
-            <a href="#contact" class="right">Contact</a>
+            <a href="../../index.html">Home</a>
+            <a href="../../posts.html">Posts</a>
+            <a href="../../contact.html" class="right">Contact</a>
         </div>
 
         <div class="row">
@@ -31,37 +30,37 @@
                 <div class="mini-posts"><a href="./posts/2025-9-14-creating-an-overlay-for-your-cheats-with-direct3d-9.html">Direct3D 9 Overlay Concepts</a></div>
             </div>
             <div class="blog-main">
-                <h1>Creating an Overlay with Direct3D 9 (Concepts)</h1>
-                <h5>Sep 14, 2025 | Direct3D 9 Overlay Concepts</h5>
+                <h1>How do Cheat Overlays Work? (Direct3D 9 Overlay Concept)</h1>
+                <h5>Sep 14, 2025 | Direct3D 9 Overlay Concept</h5>
                 <hr>
-                <h2>Why create an overlay for your cheat?</h2>
+                <h2>Introduction</h2>
                     <p>
-                        What's the purpose of adding an overlay to your cheat? That's the question I asked myself when first learning about adding an overlay to a cheat 
-                        I was creating for Skyrim.
+                        Have you ever wanted to create an overlay for your cheats and wern't sure where to start? Keep reading, and I will show you how to setup your environment 
+                        as well as the concepts behind creating an overlay.
                     </p>
                     <p>
-                        Overlays can help the cheat developer as well as potential users of a cheat keep up with specific values or toggled cheats. 
-                        Allowing for more clarity on how your hack operates and it's capabilities.
+                        Overlays are great because they can help cheat developers as well as potential users of a cheat keep up with specific values or toggled cheats. 
+                        Allowing for more clarity on how the cheat operates and it's capabilities.
                     </p>
                     <p>
-                        <strong>Disclaimer, this post will speak about the concepts behind creating an overlay for a game.<br>A future post will have code that you can follow along with!</strong>
+                        <strong>Disclaimer, this post will speak on the concepts behind creating an overlay for a game.<br></strong>A future post will have code that you can follow along with!
                     </p>
+                    <p><strong>Please hover over any words highlighted in purple to get a description of what they mean!</strong></p>
                 
                 <h2>What is required to create an overlay?</h2>
                     <p>
                         Things you need:
                     </p>
                     <ul>
-                        <li>A game that uses Direct3D 9</li>
-                        <li>2010 Direct3D 9 SDK</li>
-                        <li>IDE that is setup for Direct3D includes and libraries</li>
-                        <!-- <li>A DLL that you plan to inject into the game</li> -->
+                        <li>A game that uses <span class="hover-word">Direct3D 9</span></li>
+                        <li>2010 Direct3D 9 <span class="hover-word">SDK</span> (which includes <span class="hover-word">DirectX</span>)</li>
+                        <li><span class="hover-word">IDE</span> that is setup for Direct3D's includes and libraries</li>
                     </ul>
                 
                 <h3>Identifying what graphics API your game uses</h3>
                     <p>
-                        While some games may make the graphics API it uses obvious through launch options, checking the games imports, or by other means. 
-                        Sometimes it can be difficult to identify what graphics API a game is using.
+                        While some games may make the graphics <span class="hover-word">API</span> it uses obvious through launch options, checking the games imports, or by other means. 
+                        Sometimes it can be difficult to identify what <span class="hover-word">graphics API</span> a game is using.
                     </p>
                     <p>
                         To address this issue, we can utilize MSI Afterburner. Which you can download from the official 
@@ -203,10 +202,21 @@ void Overlay::Direct3D9XInit(HWND hwnd)
 
                 <h2>Conclusion</h2>
                     <p>Now that I have a better understanding on the concept of how creating an overlay for a game cheat works. I will begin to work on creating my own overlay program! It was fun to learn about how much goes into creating an overlay, along with the process that graphic API's play. I hope whoever reads this blog was able to learn something as well!</p>
-                    <p>If you have any feedback or want to share what you've created please feel free to let me know! I'm working on a dedicated contact section at the time of this post. Please feel free to check there for getting in contact with me and if it's not finished you can message me on Twitter/X at <strong>@nitotechdev</strong>.</p>
+                    <p>If you have any feedback or want to share what you've created please feel free to reach out! You can contact me through Twitter/X or by the email listed in <a href="../../contact.html">Contacts</a></p>
                     <br>
                     <p>Please take care, take some time to learn something new, and happy game hacking!</p>
                     <p>NitoTech</p>
+                
+                <h3>Additional Resources:</h3>
+                    <p>Documentation:</p>
+                    <a href="https://learn.microsoft.com/en-us/windows/win32/direct3d9/dx9-graphics">MSDN - Direct3D 9 Graphics</a>
+                    <br>
+                    <a href="https://learn.microsoft.com/en-us/windows/win32/directx">MSDN - DirectX Graphics</a>
+
+                    <p>Videos:</p>
+                    <a href="https://www.youtube.com/watch?v=i8Cn7fydNUA">Guided Hacking - Skyrim Overlay Example</a>
+                    <br>
+                    <a href="https://www.youtube.com/watch?v=BIZyxja3Qls">CasualGamer - External Overlay in C++</a>
             </div>
         </div>
     </body>
