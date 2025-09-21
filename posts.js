@@ -1,9 +1,16 @@
 const posts = [
     {
+        "title": "Creating an External Cheat Overlay with Direct3D 9",
+        "description": "Direct3D 9 Overlay Code Writeup",
+        "date": "Sep 21, 2025",
+        "link": "./posts/creating-an-external-cheat-overlay/",
+        "image": "./images/D3D9OverlayCodeLogo.PNG"
+    },
+    {
         "title": "How do Cheat Overlays Work? (Direct3D 9 Overlay Concept)",
         "description": "Direct3D 9 Overlay Concept",
         "date": "Sep 14, 2025",
-        "link": "./posts/concepts-for-creating-an-overlay/index.html",
+        "link": "./posts/how-do-cheat-overlays-work/",
         "image": "./images/D3D9OverlayConceptsLogo.PNG"
     }
 ];

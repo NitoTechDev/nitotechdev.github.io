@@ -9,7 +9,7 @@ const popupDescripters = {
     "ide": "Integrated Development Environment (IDE), is a software application that offers a collection of tools and a graphical interface to assist with the coding process.",
     "api": "Application Programming Interface (API), is a software interface that allows for connections between different computers or computer programs in order to communicate information to one another.",
     "graphics api": "A graphics API allows us to use software to communicate with our GPU in order to render 3D graphics and animations.",
-
+    "graphic api": "A graphics API allows us to use software to communicate with our GPU in order to render 3D graphics and animations.",
 };
 
 document.addEventListener("DOMContentLoaded", () => {
