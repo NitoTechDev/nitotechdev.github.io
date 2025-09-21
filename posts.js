@@ -4,7 +4,7 @@ const posts = [
         "description": "Direct3D 9 Overlay Code Writeup",
         "date": "Sep 21, 2025",
         "link": "./posts/creating-an-external-cheat-overlay/",
-        "image": "./images/D3D9OverlayCodeLogo.PNG"
+        "image": "./images/D3D9OverlayCodeLogo.png"
     },
     {
         "title": "How do Cheat Overlays Work? (Direct3D 9 Overlay Concept)",
