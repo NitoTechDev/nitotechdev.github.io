@@ -1,5 +1,12 @@
 const posts = [
     {
+        "title": "Create your own Malware Analysis Lab",
+        "description": "Malware Analysis Lab Walkthrough",
+        "date": "Oct 5, 2025",
+        "link": "./posts/create-your-own-malware-analysis-lab/",
+        "image": "./images/MalwareLabCreationLogo.png"
+    },
+    {
         "title": "Creating an External Cheat Overlay with Direct3D 9",
         "description": "Direct3D 9 Overlay Code Writeup",
         "date": "Sep 21, 2025",

@@ -10,6 +10,7 @@ const popupDescripters = {
     "api": "Application Programming Interface (API), is a software interface that allows for connections between different computers or computer programs in order to communicate information to one another.",
     "graphics api": "A graphics API allows us to use software to communicate with our GPU in order to render 3D graphics and animations.",
     "graphic api": "A graphics API allows us to use software to communicate with our GPU in order to render 3D graphics and animations.",
+    "ISO": "Named after the ISO 9660 standard file system, is an uncompressed digital copy of an entire optical desk (Ex. CD, DVD, Blu-ray) into a single file.",
 };
 
 document.addEventListener("DOMContentLoaded", () => {
