@@ -11,6 +11,10 @@ const popupDescripters = {
     "graphics api": "A graphics API allows us to use software to communicate with our GPU in order to render 3D graphics and animations.",
     "graphic api": "A graphics API allows us to use software to communicate with our GPU in order to render 3D graphics and animations.",
     "iso": "Named after the ISO 9660 standard file system, is an uncompressed digital copy of an entire optical desk (Ex. CD, DVD, Blu-ray) into a single file.",
+    "splunk": "A powerful data platform used to help organizations collect, analyze, and act on machine-generated data in real time.",
+    "suricata": "A high performance Network IDS, IPS, and Network Security Monitoring engine.",
+    "user-agents":"A computer program representing a person, such as a download manager, another application, or a browser.",
+    "zeek":"An open-source network security monitoring tool.",
 };
 
 document.addEventListener("DOMContentLoaded", () => {

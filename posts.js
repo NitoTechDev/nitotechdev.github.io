@@ -1,5 +1,12 @@
 const posts = [
     {
+        "title": "NerisBot - Writeup",
+        "description": "Cyberdefenders NerisBot Lab Walkthrough",
+        "date": "Oct 22, 2025",
+        "link": "./posts/cyberdefenders/nerisbot",
+        "image": "./images/cyberdefenders/nerisbot/splunk-md5-query.png"
+    },
+    {
         "title": "Create your own Malware Analysis Lab",
         "description": "Malware Analysis Lab Walkthrough",
         "date": "Oct 5, 2025",

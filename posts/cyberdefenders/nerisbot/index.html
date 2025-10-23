@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+    <title>NitoTech | NerisBot - Writeup</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../../../index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <script src="../../../blog.js"></script>
+    <body>
+        <div class="header poppins-regular">
+            <h1>NitoTech</h1>
+            <p>Game Vulnerability Researcher | Anti-Cheat Enthusiast</p>
+        </div>
+
+        <div class="navbar">
+            <a href="../../../index.html">Home</a>
+            <a href="../../../posts.html">Posts</a>
+            <a href="../../../contact.html" class="right">Contact</a>
+        </div>
+
+        <div class="row">
+            <div class="blog-side">
+                <h2>Check out my <br>other Posts!</h2>
+                <h3>My Favorite Projects</h3>
+                <p>Here are some of my favorite projects I've worked on</p>
+                <div class="mini-posts"><a href="#HackingNioh">Nioh Hack<br>(Under Revisions)</a></div><br>
+                <div class="mini-posts"><a href="#SMAT">Static Malware Analysis Tool<br>(Blog in Development)</a></div><br>
+                <div class="mini-posts"><a href="./posts/how-do-cheat-overlays-work/">Direct3D 9 Overlay Concepts</a></div>
+            </div>
+            <div class="blog-main">
+                <h1>NerisBot - Writeup</h1>
+                <h5>Oct 22, 2025 | Cyberdefenders NerisBot Lab Walkthrough</h5>
+                <hr>
+                <h2>Introduction</h2>
+                    <p>
+                      Today, we are going to be looking at NerisBot. A cyberdefense lab published by Cyberdefenders. <br>If you haven't tried out Cyberdefenders, I highly recommend you check it out! It's a great way to get more acquainted with the defensive side of cybersecurity.
+                      Especially if you're used to working primarily on offensive security. Below we will walk through the NerisBot lab, and I will explain the techniques and tools utilized in order to complete this lab.
+                    </p>
+                    <hr class="divider">
+
+                <h2>Scenario</h2>
+                    <p>
+                      Unusual network activity has been detected within a university environment, indicating potential malicious intent. These anomalies, observed six hours ago, 
+                      suggest the presence of command and control (C2) communications and other harmful behaviors within the network. Your team has been tasked with analyzing recent network traffic logs to investigate the scope and impact of these activities. 
+                      The investigation aims to identify command and control servers and uncover malicious interactions.
+                    </p>
+                    <hr class="divider">
+
+                <h2>Analysis</h2>
+                    <h3>
+                      Q1: During the investigation of network traffic, unusual patterns of activity were observed in Suricata logs, suggesting potential unauthorized access. 
+                      One external IP address initiated access attempts and was later seen downloading a suspicious executable file. This activity strongly indicates the origin of the attack.
+                      What is the IP address from which the initial unauthorized access originated?
+                    </h3>
+                        <p>For this lab, we are working with <span class="hover-word">Splunk</span>. Splunk offers a lot of options when it comes to queries and ways to obtain information depending on how your environment is setup.</p>
+                        <p>Luckily for us, we can see in the question above, that we are going to be working with <span class="hover-word">Suricata</span> logs. Which will help us later on with utilizing the proper syntax in our queries.</p>
+                        <p>Since we are looking for an IP address that was last seen <strong>downloading</strong> an executable file. We can look through the gathered Suricata logs, and look for any HTTP-related logs regarding our external IP address.</p>
+                        
+                        <br>
+                        <p>The query I used to find this information was:</p>
+                        <pre><code>
+    sourcetype="suricata" event_type="http" AND http.url="*.exe*"
+    | stats values(src_ip) as src_ip, values(http.http_user_agent) as user_agent, values(http.url) as url by dest_ip
+                        </code></pre>
+                        <p>This query allows us to filter our gathered suricata logs to find what we are looking for. I will explain how the query works below:</p>
+                        <ol>
+                        <li><strong>sourcetype="suricata"</strong></li>
+                        <p>&emsp;This allows us to only look at events that are from Suricata</p>
+                        <li><strong>event_type="http"</strong></li>
+                        <p>&emsp;Filters the Suricata events to only show events related to HTTP</p>
+                        <li><strong>AND http.url="*.exe*</strong></li>
+                        <p>&emsp;Filters the HTTP events to only include ones involving .exe files</p>
+                        <li><strong>|</strong></li>
+                        <p>&emsp;This represents a "pipe". Which takes the output from before the pipe and feeds it as the input to what comes after the pipe.</p>
+                        <li><strong>values()</strong></li>
+                        <p>&emsp;Gathers specific values from each event so that we can create a table to look through.</p>
+                        <p>&emsp;One that helps a lot that I found out after reading through Cyberdefender's <a href="https://cyberdefenders.org/walkthroughs/nerisbot/">NerisBot Lab Official Walkthrough</a>.<br>&emsp; Is to grab the user-agents value from the HTTP events.</p>
+                        </ol>
+
+                        <br>
+                        <p>That query will result in these three events being shown:</p>
+                        <img src="../../../images/cyberdefenders/nerisbot/splunk-exe-query.png" style="max-width: 100%; height: auto;">
+                        
+                        <br><br>
+                        <p><span class="hover-word">User-Agents</span> in the context of http request headers. Is a string that lets servers and network peers identify the application, operating system, vendor, and/or version of the requesting user agent as per MDN.</p>
+                        <p>They typically follow a format similar to this for web browsers:</p>
+                        <pre><code>
+    User-Agent: Mozilla/5.0 (&lt;system-information&gt;) &lt;platform&gt; (&lt;platform-details&gt;) &lt;extensions&gt;
+                        </code></pre>
+                        <p>As we can see from the picture above, only one event includes a user-agent. This confirms the malicious IP address if we take a look at the destination IP from that event: <strong>195.88.191.59</strong></p>
+                    
+                    <hr class="divider">
+                    <h3>Q2: Investigating the attacker's domain helps identify the infrastructure used for the attack, assess its connections to other threats, and take measures to mitigate future attacks. What is the domain name of the attacker server?</h3>
+                        <p>While this question may not give us a hint as to what kind of logs we can use in order to find the domain name of the attack server. We can look back at the description of the lab and it mentions that use of Zeek logs.</p>
+                        <p><span class="hover-word">Zeek</span> logs allow us to take a look at network logs that have been gathered. Including DNS logs that may link the malicious IP address back to it's registered domain name.</p>
+                        <p>We can take a look at the event logs relating to our malicious IP with this query:</p>
+                        <pre><code>
+sourcetype="zeek:dns" AND "195.88.191.59"
+| stats values(id_orig_h) as Src_IP by query
+                        </code></pre>
+                        <p>This query will find a single event that we can see below.</p>
+                        <img src="../../../images/cyberdefenders/nerisbot/splunk-dns-query.png" style="max-width: 100%; height: auto;">
+                        <br><br>
+                        <p>From this query we can see the domain name that is registered to our malicious IP address: <strong>nocomcom.com</strong></p>
+                    
+                    <hr class="divider">
+                    <h3>Q3: Knowing the IP address of the targeted system helps focus remediation efforts and assess the extent of the compromise. What is the IP address of the system that was targeted in this breach?</h3>
+                        <p>
+                            Luckily for us, we have already identified the IP address of the targeted system from the breach. If we go back to our first query where we identified the malicious IP that was downloading executables. We can see the IP address that 
+                            it was targeting.
+                        </p>
+                        <img src="../../../images/cyberdefenders/nerisbot/splunk-exe-query.png" style="max-width: 100%; height: auto;">
+                        
+                        <br><br>
+                        <p>In this case, what I deemed the "src_ip" is the system that was targeted. Giving us the answer: <strong>147.32.84.165</strong></p>
+                    
+                    <hr class="divider">
+                    <h3>Q4: Identify all the unique files downloaded to the compromised host. How many of these files could potentially be malicious?</h3>
+                        <p>For this question, we'll utilize another Zeek event. <strong>zeek:files</strong>, which will allow us to include only events including files. zeek:files provides two IP addresses within the event section. One being from rx_hosts and the other is from tx_hosts.</p>
+                        <p>A quick google search can help us identify that tx_hosts is the IP address that transmitted the file. Which in this case would be our malicious IP. With that in mind we can create this query:</p>
+                        <pre><code>
+sourcetype="zeek:files" AND tx_hosts="195.88.191.59" 
+| stats values(md5)
+                        </code></pre>
+                        <p>That query will result in these hashes being shown.</p>
+                        <img src="../../../images/cyberdefenders/nerisbot/splunk-md5-query.png" style="max-width: 100%; height: auto;">
+                        
+                        <br><br>
+                        <p>Now we've identifed how many files were sent from our IP. Next we need to identify if they are malicious. We can do this by copying the md5 hash and navigating to any antivirus analysis website (I personally use VirusTotal) and see if it matches any known malicious files.</p>
+                        <p>After checking each hash in VirusTotal, we can see that all five are identified as malicious. Thus giving us our final answer of: <strong>5</strong></p>
+                    
+                    <hr class="divider">
+                    <h3>Q5: What is the SHA256 hash of the malicious file disguised as a .txt file?</h3>
+                        <p>If you already put in all the hashes into VirusTotal this next question will be very easy. We can look at the files that we found then navigate to the <strong>details</strong> tab. Here we can scroll down and find the <strong>Names</strong> section.</p>
+                        <p>According to VirusTotal this section if for "Names with which this file has been submitted or seen in the wild". Looking through the file with the md5 hash: <strong>564048b35da9d447f2e861d5896d908d</strong> we can see the name <strong>kx4.txt</strong> which matches the .txt file we also found in our initial query.</p>
+                        <img src="../../../images/cyberdefenders/nerisbot/virustotal-filename.png" style="max-width: 100%; height: auto;">
+                        
+                        <br><br>
+                        <p>In that same details tab, we can look in the <strong>basic properties</strong> section and we can see the listed SHA-256 hash. <br>Giving us our answer of: <strong>6fbc4d506f4d4e0a64ca09fd826408d3103c1a258c370553583a07a4cb9a6530</strong></p>
+                    
+                    <hr class="divider">
+
+                <h2>Conclusion</h2>
+                    <p>You have now successfully completed the Cyberdefenders NerisBot lab!</p>
+                    <p>Outside of a few videos, this was my first time interacting with Splunk, Suricata, and Zeek. There was a lot of content I was unfamiliar with and my initial run through of the lab I had to rely heavily on hints as I wasn't sure where to even start.</p>
+                    <p>However, as with anything you learn, it is important to go back over and make sure you understand all the material before moving on. That way you can atleast be more comfortable when you need to interact with the software again.</p>
+                    <p>I hope that my walkthrough was helpful and hopefully you were able to learn something if it was also your first time using these tools!</p>
+                    <br>
+                    <p>Please take care, take some time to learn something new, and happy game hacking!</p>
+                    <p>NitoTech</p>
+                <hr>
+
+                <h2>Additional Resources:</h2>
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/User-Agent">MDN | User-Agent Header</a>
+                        <br><br>
+                        <a href="https://cyberdefenders.org/walkthroughs/nerisbot/">Cyberdefenders Official NerisBot Walkthrough</a>
+                        <br><br>
+                        <a href="https://cyberdefenders.org/blueteam-ctf-challenges/nerisbot/">NerisBot Lab</a>
+                        <br><br>
+                        <a href="https://zeek.org/">Learn more about Zeek</a>
+                        <br><br>
+                        <a href="https://suricata.io/">Learn more about Suricata</a>
+            </div>
+        </div>
+    </body>
+</html>

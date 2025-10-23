@@ -129,6 +129,10 @@ body {
     color: #432f92c4;
 }
 
+.divider {
+    margin-top: 25px;
+    max-width: 80%;
+}
 
 /* --------------------------------------------- */
 /* Mini Blog Post Styles */
@@ -182,7 +186,7 @@ body {
     max-height: 100%;
     max-width: 100%;
     object-fit: contain;
-    
+    border: 2.5px solid black;
 }
 
 .big-posts-title {
@@ -245,7 +249,7 @@ pre {
   border-radius: 5px; /* Rounded corners */
   overflow: auto; /* Adds scrollbar if content overflows */
   font-family: 'Monaco', 'Consolas', monospace; /* Monospaced font */
-  font-size: 0.9em; /* Slightly smaller font size */
+  font-size: 1em; /* Slightly smaller font size */
   line-height: 1.4; /* Line height for better readability */
   max-width: 1000px;
 }
