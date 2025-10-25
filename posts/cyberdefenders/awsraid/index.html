@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+    <title>NitoTech | AWSRaid - Writeup</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../../../index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <script src="../../../blog.js"></script>
+    <body>
+        <div class="header poppins-regular">
+            <h1>NitoTech</h1>
+            <p>Game Vulnerability Researcher | Anti-Cheat Enthusiast</p>
+        </div>
+
+        <div class="navbar">
+            <a href="../../../index.html">Home</a>
+            <a href="../../../posts.html">Posts</a>
+            <a href="../../../contact.html" class="right">Contact</a>
+        </div>
+
+        <div class="row">
+            <div class="blog-side">
+                <h2>Check out my <br>other Posts!</h2>
+                <h3>My Favorite Projects</h3>
+                <p>Here are some of my favorite projects I've worked on</p>
+                <div class="mini-posts"><a href="#HackingNioh">Nioh Hack<br>(Under Revisions)</a></div><br>
+                <div class="mini-posts"><a href="#SMAT">Static Malware Analysis Tool<br>(Blog in Development)</a></div><br>
+                <div class="mini-posts"><a href="./posts/how-do-cheat-overlays-work/">Direct3D 9 Overlay Concepts</a></div>
+            </div>
+            <div class="blog-main">
+                <h1>AWSRaid - Writeup</h1>
+                <h5>Oct 25, 2025 | Cyberdefenders AWSRaid Lab Walkthrough</h5>
+                <hr>
+                <h2>Introduction</h2>
+                    <p>
+                      Today, we are going to be looking at AWSRaid. A cyberdefense lab published by <a href="https://cyberdefenders.org/">Cyberdefenders</a>. <br>If you haven't tried out Cyberdefenders, 
+                      I highly recommend you check it out! It's a great way to get more acquainted with the defensive side of cybersecurity. Especially if you're used to working primarily on offensive security.
+                    </p>
+                    <p>This lab utilizes a <span class="hover-word">Splunk</span> instance that contains AWS <span class="hover-word">CloudTrail</span> logs. The goal of the lab is to use these logs to identify unauthroized access, analyze configuration changes, and detect persistence mechanisms.</p>
+
+                    <p><strong>Please hover over any words highlighted in purple to get a description of what they mean!</strong></p>
+                    <hr class="divider">
+                
+                <h2>Scenario</h2>
+                    <p>
+                      Your organization utilizes AWS to host critical data and applications. An incident has been reported that involves unauthorized access to data and potential exfiltration. 
+                      The security team has detected unusual activities and needs to investigate the incident to determine the scope of the attack.
+                    </p>
+                    <hr class="divider">
+
+                <h2>Analysis</h2>
+                    <p>The only kind of events collected in this lab are defined as "<strong>aws:cloudtrail</strong>". Going into this lab, I had never interacted with CloudTrail in the past and don't have a lot of experience with Splunk.</p>
+                    <p>Fortunately, I was able to learn a lot about each of them while completing this lab and looking through <a href="https://cyberdefenders.org/walkthroughs/awsraid/">Cyberdefender's Official AWSRaid Walkthrough</a> as well. I will speak more on what all I learned as we go through each question.</p>
+
+                <h3>Q1: Knowing which user account was compromised is essential for understanding the attacker's initial entry point into the environment. What is the username of the compromised user?</h3>
+                    <p>The first thing we need to find, is the username of the compromised user. The first thing we need to identify is the layout of "aws:cloudtrail" events. So let's do a general query and see what we can find out:</p>
+                    <pre><code>
+sourcetype="aws:cloudtrail"
+                    </code></pre>
+                    <br>
+                    <p>That will result in this event being shown. Now we can take a look at everything contained in the event.</p>
+                    <img src="../../../images/cyberdefenders/awsraid/splunk-sourcetype-query.png">
+                                            
+                    <br><br>
+                    <p>From my experience enteracting with these events, the main things we'll want to filter our queries by are:</p>
+                    <ul>
+                      <li><strong>eventName</strong></li>
+                      <li><strong>eventSource</strong></li>
+                      <li><strong>requestParameters</strong></li>
+                      <li><strong>responseElements</strong></li>
+                      <li><strong>sourceIPAddress</strong></li>
+                      <li><strong>userIdentity</strong></li>
+                    </ul>
+                    <p>The next thing we need to figure out, is how to identify what a succesful login attempt looks like. In order to do this, I searched for a list of aws:cloudtrail eventName and eventSouce names.</p>
+                    <p>While there doesn't seem to be a lot of official documentation on all the choices. I fortunately found a GitHub repository that contained a list of eventNames created by pkazi. You can find the list here: <a href="https://gist.github.com/pkazi/8b5a1374771f6efa5d55b92d8835718c?utm_source=chatgpt.com">pkazi/clouldTrainEventNames.list</a></p>
+                    <p>I then searched through the list for any eventName's that include "login". From that I found the eventName: <strong>consoleLogin</strong></p>
+                    <p>Performing an additional query to now filter by this event we can find a list of successful and failed login attempts:</p>
+                    <pre><code>
+sourcetype="aws:cloudtrail" eventName="consoleLogin"
+                    </code></pre>
+                    <br>
+                    <p>Now that we see attempted logins, we can look into the <strong>responseElements</strong> to see if the login was successful or a failure.</p>
+                    <p>If we decide to then filter by successful logins, we can see that there is a total of 16 successful logins. Not a narrow enough search to identify which one may be our compromised account.</p>
+                    <p>If we filter by failed logins, we might be able to identify something around our bad actor. We'll run the following query to check for this:</p>
+                    <pre><code>
+sourcetype="aws:cloudtrail" eventName="consolelogin" "responseElements.ConsoleLogin"="Failure"
+                    </code></pre>
+                    <br>
+                    <p>That will result in a failed login attempt being shown which I'll include an example of here:</p>
+                    <img src="../../../images/cyberdefenders/awsraid/splunk-failedlogin-query.png">
+
+                    <br><br>
+                    <p>Once we take a look at the other failed login attempts, we can notice that a large quantity of failed attempts coming from a single IP address in the <strong>sourceIPAddress</strong> field. This could be from password fuzzing or some other form of password brute-forcing.</p>
+                    <p>Now that we have a suspicious IP address, we can filter by that IP and check ConsoleLogin for successful logins.</p>
+                    <pre><code>
+sourcetype="aws:cloudtrail" eventName="consolelogin" "responseElements.ConsoleLogin"="Success" "sourceIPAddress"=<strong>***.***.**.**</strong>
+                    </code></pre>
+                    <p>After we filter by this, we see a single event listed. We can then open the <strong>userIdentity</strong> field and see the <strong>userName</strong> the bad actor succssfully logged in with.</p>
+                    <hr class="divider">
+
+
+                <h3>Q2: We must investigate the events following the initial compromise to understand the attacker's motives. What is the timestamp for the first access to an S3 object by the attacker?</h3>
+                    <p>Now we need to find the first time our bad actor accessed an S3 object using the compromised account. So we need to find out how to filter for S3 objects as well as filter for our compromised used.</p>
+                    <p>If you look back at the results of the first query we ran. You may have noticed that the eventSource was set as <strong>s3.amazonaws.com</strong>. If we filter by this, we can see events that interact with S3 buckets. If we then include a filter for our compromised user, we try and identify the intial access by running this query:</p>
+                    <pre><code>
+sourcetype="aws:cloudtrail" eventSource="s3.amazonaws.com" "userIdentity.userName"="helpdesk.luke" "sourceIPAddress"=185.192.70.78
+| sort _time
+                    </code></pre>
+                    <br>
+                    <p>We can utilize <strong>| sort _time</strong> to sort by the oldest event that was logged. That query will result in this event being shown:</p>
+                    <img src="../../../images/cyberdefenders/awsraid/splunk-s3bucket-query.png">
+                    
+                    <br><br>
+                    <p>Though blurred in the image above, the listed event will include the first time our compromised account accessed an S3 bucket.</p>
+                    <hr class="divider">
+
+                <h3>Q3: Among the S3 buckets accessed by the attacker, one contains a DWG file. What is the name of this bucket?</h3>
+                    <p>This question wants us to find an S3 bucket that was accessed by the attacker and contains a DWG file.</p>
+                    <p>I learned during this question that while the general structure for filters is &le;field&ge; = &le;value&ge;. You can also search by putting text between quotes. So now we change our query and search for our compromised account accessing a S3 bucket where the event contains a DWG file like so:</p>
+                    <pre><code>
+sourcetype="aws:cloudtrail" eventSource="s3.amazonaws.com" "userIdentity.userName"="helpdesk.luke" "*.dwg"
+                    </code></pre>
+                    <br>
+                    <p>That will result in the following event being shown:</p>
+                    <img src="../../../images/cyberdefenders/awsraid/splunk-dwgfile-query.png">
+                    
+                    <br><br>
+                    <p>As you can see above, if we open the <strong>requestParameters</strong>. We can see the <strong>Key</strong> field which contains the name of the .DWG file, and above it we can see the name of the S3 bucket that was accessed. Giving us our answer!</p>
+                    <hr class="divider">
+
+                <h3>Q4: We've identified changes to a bucket's configuration that allowed public access, a significant security concern. What is the name of this particular S3 bucket?</h3>
+                    <p>Now is where the GitHub page I mentioned earlier will come in handy. We need to find an eventName or eventSource that allows us to look at events tied to changes to an S3 bucket that will allow for public access.</p>
+                    <p>If you navigate to that eventName list, you can press <strong>ctrl + f</strong> and then search for any keywords that has to do with an S3 bucket, and making it public.</p>
+                    <p>I advise you go through and try to find some potential eventName's on your own! However the strategy I used was searching for the word "bucket". This resulted in 38 eventNames coming back.</p>
+                    <p>Within those event names however lied three groups of names. One prepending with Delete, another with Get, and finally one with <strong>Put</strong>. Since I am no expert in aws:cloudtrail. I decided to then use a query that looked for any eventName's that included "PutBucket" since we are looking for configuration changes.</p>
+                    <p>This is the query I used:</p>
+                    <pre><code>
+sourcetype="aws:cloudtrail" eventSource="s3.amazonaws.com" "userIdentity.userName"="helpdesk.luke" eventName="PutBucket*"
+                    </code></pre>
+                    <br>
+                    <p>That query resulted in finding this single event:</p>
+                    <img src="../../../images/cyberdefenders/awsraid/splunk-putbucket-query.png">
+
+                    <br><br>
+                    <p>Within that event, if we look within the <strong>requestParameters</strong> we can see a bucket name listed. Giving us our answer!</p>
+                    <hr class="divider">
+
+                <h3>Q5: Creating a new user account is a common tactic attackers use to establish persistence in a compromised environment. What is the username of the account created by the attacker?</h3>
+                    <p>We can use the same approach as question 4 when approaching how to identify what event would represent our bad actor creating an account.</p>
+                    <p>So we can navigate back to the GitHub page and search for more keywords. One obvious one we can search with is "<strong>create</strong>". This does however result in 334 results... Maybe we could try and search using "<strong>user</strong>".</p>
+                    <p>Though this results in 79 results, it's a lot better than before. Now we can do a quick scan over the listed eventNames to see if anything sticks out.</p>
+                    <p>Using this approach we can find the eventName "CreateUser". Which we can then use in the following query:</p>
+                    <pre><code>
+sourcetype="aws:cloudtrail" "userIdentity.userName"="helpdesk.luke" eventName="CreateUser"
+                    </code></pre>
+                    <br>
+                    <p>This will result in us finding a single event centered around an account being created:</p>
+                    <img src="../../../images/cyberdefenders/awsraid/splunk-createuser-query.png">
+
+                    <br><br>
+                    <p>Within that event we can once again check the <strong>requestParameters</strong> and we will find the username for the account that was created!</p>
+                    <hr class="divider">
+
+                <h3>Q6: Following account creation, the attacker added the account to a specific group. What is the name of the group to which the account was added?</h3>
+                    <p>We'll rely on the eventName list on last time to try and find an eventName that is tied to adding a user to a group.</p>
+                    <p>So let's search for "group" and parse through the results to see if we can see anything that would fit what we're looking for.</p>
+                    <p>A few ones that might fit is "AddMembersToGroup", "AddUsersToGroup", "AddUserToGroup", "AddOrUpdateGroups", etc...</p>
+                    <p>I suggest playing around with different ones to see if you can find one that shows the attacker adding the account to a group. If you'd prefer to know the right one, the eventName related to this action is <strong>AddUserToGroup</strong></p>
+                    <p>Knowing this, we can use the following query:</p>
+                    <pre><code>
+sourcetype="aws:cloudtrail" "userIdentity.userName"="helpdesk.luke" eventName="AddUserToGroup"
+                    </code></pre>
+                    <br>
+                    <p>This query will result in the following event:</p>
+                    <img src="../../../images/cyberdefenders/awsraid/splunk-adduser-query.png">
+
+                    <br><br>
+                    <p>Looking within the <strong>requestParameters</strong> we can see the name of the group the created account was added to!</p>
+                    <hr class="divider">
+
+                <h2>Conclusion</h2>
+                    <p>You have now successfully completed the Cyberdefenders AWSRaid lab!</p>
+                    <p>I hope this Writeup was able to teach out something or atleast give you another way to approach sovling labs where you're not sure where to start.</p>
+                    <p>When there's so much in IT / Cybersecurity to know it can be daunting diving into the unknown, but with enough time and persistence. I personally believe anyone can learn anything!</p>
+                    <br>
+                    <p>So please take care, take some time to learn something new, and happy game hacking!</p>
+                    <p>NitoTech</p>
+                <hr>
+
+                <h2>Additional Resources:</h2>
+                        <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html">What is AWS CloudTrail?</a>
+                        <br><br>
+                        <a href="https://cyberdefenders.org/walkthroughs/awsraid/">Cyberdefenders Official AWSRaid Walkthrough</a>
+                        <br><br>
+                        <a href="https://cyberdefenders.org/blueteam-ctf-challenges/awsraid/">AWSRaid Lab</a>
+                        <br><br>
+                        <a href="https://www.splunk.com/en_us/blog/security/cloudtrail-data-security-operations.html">How to Use CloudTrail Data for Security Operations & Threat Hunting</a>
+                        <br><br>
+                        <a href="https://gist.github.com/pkazi/8b5a1374771f6efa5d55b92d8835718c?utm_source=chatgpt.com">Pkazi - CloudTrail eventName list</a>
+            </div>
+        </div>
+    </body>
+</html>

@@ -15,6 +15,7 @@ const popupDescripters = {
     "suricata": "A high performance Network IDS, IPS, and Network Security Monitoring engine.",
     "user-agents":"A computer program representing a person, such as a download manager, another application, or a browser.",
     "zeek":"An open-source network security monitoring tool.",
+    "cloudtrail":"A service that enables governance, compliance, operaitonal auditing, and auditing of AWS accounts. Allowing you to track user activity and API usage on AWS.",
 };
 
 document.addEventListener("DOMContentLoaded", () => {

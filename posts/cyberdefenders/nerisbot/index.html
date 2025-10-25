@@ -38,6 +38,8 @@
                       Today, we are going to be looking at NerisBot. A cyberdefense lab published by Cyberdefenders. <br>If you haven't tried out Cyberdefenders, I highly recommend you check it out! It's a great way to get more acquainted with the defensive side of cybersecurity.
                       Especially if you're used to working primarily on offensive security. Below we will walk through the NerisBot lab, and I will explain the techniques and tools utilized in order to complete this lab.
                     </p>
+
+                    <p><strong>Please hover over any words highlighted in purple to get a description of what they mean!</strong></p>
                     <hr class="divider">
 
                 <h2>Scenario</h2>
@@ -81,7 +83,7 @@
 
                         <br>
                         <p>That query will result in these three events being shown:</p>
-                        <img src="../../../images/cyberdefenders/nerisbot/splunk-exe-query.png" style="max-width: 100%; height: auto;">
+                        <img src="../../../images/cyberdefenders/nerisbot/splunk-exe-query.png">
                         
                         <br><br>
                         <p><span class="hover-word">User-Agents</span> in the context of http request headers. Is a string that lets servers and network peers identify the application, operating system, vendor, and/or version of the requesting user agent as per MDN.</p>
@@ -101,7 +103,7 @@ sourcetype="zeek:dns" AND "195.88.191.59"
 | stats values(id_orig_h) as Src_IP by query
                         </code></pre>
                         <p>This query will find a single event that we can see below.</p>
-                        <img src="../../../images/cyberdefenders/nerisbot/splunk-dns-query.png" style="max-width: 100%; height: auto;">
+                        <img src="../../../images/cyberdefenders/nerisbot/splunk-dns-query.png">
                         <br><br>
                         <p>From this query we can see the domain name that is registered to our malicious IP address: <strong>nocomcom.com</strong></p>
                     
@@ -111,7 +113,7 @@ sourcetype="zeek:dns" AND "195.88.191.59"
                             Luckily for us, we have already identified the IP address of the targeted system from the breach. If we go back to our first query where we identified the malicious IP that was downloading executables. We can see the IP address that 
                             it was targeting.
                         </p>
-                        <img src="../../../images/cyberdefenders/nerisbot/splunk-exe-query.png" style="max-width: 100%; height: auto;">
+                        <img src="../../../images/cyberdefenders/nerisbot/splunk-exe-query.png">
                         
                         <br><br>
                         <p>In this case, what I deemed the "src_ip" is the system that was targeted. Giving us the answer: <strong>147.32.84.165</strong></p>
@@ -125,7 +127,7 @@ sourcetype="zeek:files" AND tx_hosts="195.88.191.59"
 | stats values(md5)
                         </code></pre>
                         <p>That query will result in these hashes being shown.</p>
-                        <img src="../../../images/cyberdefenders/nerisbot/splunk-md5-query.png" style="max-width: 100%; height: auto;">
+                        <img src="../../../images/cyberdefenders/nerisbot/splunk-md5-query.png">
                         
                         <br><br>
                         <p>Now we've identifed how many files were sent from our IP. Next we need to identify if they are malicious. We can do this by copying the md5 hash and navigating to any antivirus analysis website (I personally use VirusTotal) and see if it matches any known malicious files.</p>
@@ -135,7 +137,7 @@ sourcetype="zeek:files" AND tx_hosts="195.88.191.59"
                     <h3>Q5: What is the SHA256 hash of the malicious file disguised as a .txt file?</h3>
                         <p>If you already put in all the hashes into VirusTotal this next question will be very easy. We can look at the files that we found then navigate to the <strong>details</strong> tab. Here we can scroll down and find the <strong>Names</strong> section.</p>
                         <p>According to VirusTotal this section if for "Names with which this file has been submitted or seen in the wild". Looking through the file with the md5 hash: <strong>564048b35da9d447f2e861d5896d908d</strong> we can see the name <strong>kx4.txt</strong> which matches the .txt file we also found in our initial query.</p>
-                        <img src="../../../images/cyberdefenders/nerisbot/virustotal-filename.png" style="max-width: 100%; height: auto;">
+                        <img src="../../../images/cyberdefenders/nerisbot/virustotal-filename.png">
                         
                         <br><br>
                         <p>In that same details tab, we can look in the <strong>basic properties</strong> section and we can see the listed SHA-256 hash. <br>Giving us our answer of: <strong>6fbc4d506f4d4e0a64ca09fd826408d3103c1a258c370553583a07a4cb9a6530</strong></p>

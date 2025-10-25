@@ -134,6 +134,15 @@ body {
     max-width: 80%;
 }
 
+.blog-main img {
+    max-width: 100%; 
+    height: auto;
+}
+
+.blog-main pre {
+    margin-left: 25px;
+}
+
 /* --------------------------------------------- */
 /* Mini Blog Post Styles */
 
