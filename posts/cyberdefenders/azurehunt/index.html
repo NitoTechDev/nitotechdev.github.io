@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+    <title>NitoTech | AzureHunt - Writeup</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../../../index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <script src="../../../blog.js"></script>
+    <body>
+        <div class="header poppins-regular">
+            <h1>NitoTech</h1>
+            <p>Game Vulnerability Researcher | Anti-Cheat Enthusiast</p>
+        </div>
+
+        <div class="navbar">
+            <a href="../../../index.html">Home</a>
+            <a href="../../../posts.html">Posts</a>
+            <a href="../../../contact.html" class="right">Contact</a>
+        </div>
+
+        <div class="row">
+            <div class="blog-side">
+                <h2>Check out my <br>other Posts!</h2>
+                <h3>My Favorite Projects</h3>
+                <p>Here are some of my favorite projects I've worked on</p>
+                <div class="mini-posts"><a href="#HackingNioh">Nioh Hack<br>(Under Revisions)</a></div><br>
+                <div class="mini-posts"><a href="#SMAT">Static Malware Analysis Tool<br>(Blog in Development)</a></div><br>
+                <div class="mini-posts"><a href="./posts/how-do-cheat-overlays-work/">Direct3D 9 Overlay Concepts</a></div>
+            </div>
+            <div class="blog-main">
+                <h1>AzureHunt - Writeup</h1>
+                <h5>Dec 2, 2025 | Cyberdefenders AzureHunt Lab Walkthrough</h5>
+                <hr>
+                <h2>Introduction</h2>
+                    <p>
+                      Today, we are going to be looking at AzyreGybt. A cyberdefense lab published by <a href="https://cyberdefenders.org/">Cyberdefenders</a>. <br>If you haven't tried out Cyberdefenders, 
+                      I highly recommend you check them out! It's a great way to get more acquainted with the defensive side of cybersecurity. Especially if you're used to working primarily on offensive security.
+                    </p>
+                    <p>
+                        This lab utilizes a <span class="hover-word">Elastic</span> instance that contains Azure AD, Activity, and Blob Storage logs. The goal of the lab is to use these logs to
+                        reconstruct an attack timeline, identifying initial access, lateral movement, persistence, and data exfiltration.
+                    </p>
+
+                    <p><strong>Please hover over any words highlighted in purple to get a description of what they mean!</strong></p>
+                    <hr class="divider">
+                
+                <h2>Scenario</h2>
+                    <p>
+                      A finance company's Azure environment has flagged multiple failed login attempts from an unfamiliar geographic location, followed by a successful authentication. 
+                      Shortly after, logs indicate access to sensitive Blob Storage files and a virtual machine start action. Investigate authentication logs, storage access patterns, 
+                      and VM activity to determine the scope of the compromise.
+                    </p>
+                    <hr class="divider">
+
+
+                <h2>Analysis</h2>
+                    <p>Going into this lab, I had never utilized elastic. From one learner to another, something I came to rely upon when navigating this new environment is the <strong>field search</strong> on the left side of the screen:</p>
+                    <img src="../../../images/cyberdefenders/azurehunt/elastic-search-field.png">
+                    <p>It helps a lot when you don't know exactly what fields you're supposed to be searching for or where to even start. Play around with plugging in some keywords for what you're looking for and see what fields you can find!</p>
+                    <br>
+
+                <h3>Q1: As a US-based company, the security team has observed significant suspicious activity from an unusual country. What is the name of the country from which the attack originated?</h3>
+                    <p>Lets start by using the context of the question to help in finding our first answer. When you first open our elastic instance you'll notice we have a total of <strong>348</strong> logs.</p>
+                    <p>The question informs us that we are a US based company and that we're looking to find the name of the country that the attack originated from. Knowing this we can go over to the field search bar and see if we can find any fields related to "country".</p>
+                    <p>A quick search shows that we have 4 options, among these options is <strong>geo.country_name</strong> and <strong>source.geo.country_name</strong>. Since we want to know where the attack originated from, lets look at the respective source field.</p>
+                    <p>In order to narrow down our available logs, we can either utilize the query bar using KQL syntax or the blue plus symbol next to it to create a filter. I personally like to put any filters I want to stay consitent throughout my queries in filter section and any filters I'm testing within the query bar.</p>
+                    <p>Additionally, we can utilize Kibana's <strong>Visualize Library</strong> which you can access from the three horizontal bars in the top left and add the field we found earlier to get a representation of what other countries have logs.</p>
+                    <img src="../../../images/cyberdefenders/azurehunt/elastic-kibana-visualized.png">
+                    
+                    <p>From what we can see above we can see that outside of a few france logs everything originated from Germany which gives our answer to question 1.</p>
+                    <hr class="divider">
+
+
+                <h3>Q2: To establish an accurate incident timeline, what is the timestamp of the initial activity originating from the country?</h3>
+                    <p>Now that we know which country the attack originated from they want us to identify the timestamp when we first saw activity from the country.</p>
+                    <p>To do this, we change our filter to only look for the source geo country that is equal to germany: <strong><code>source.geo.country_name.keyword: Germany</code></strong>.</p>
+                    <p>Then we can click on <strong>@timestamp</strong> and sort by Old-New. That way we can see the oldest activity we have logged.</p>
+                    <img src="../../../images/cyberdefenders/azurehunt/elastic-search-time.png">
+                    
+                    <p>Looking at the oldest log we have, under the timestamp field we can see our answer to question 2!</p>
+                    <hr class="divider">
+                
+
+                <h3>Q3: To assess the scope of compromise, we must determine the attacker's entry point. What is the display name of the compromised user account?</h3>
+                    <p>Now we need to determine the name of account the attacker used to as an entry point. </p>
+                    <p>From our previous question if you're following along, you can now see that we are left with only <strong>26</strong> logs. Not a crazy amont if we wanted to go through them manually, but if we wanted to save some time we could also sort by: <br><strong>azure.signinlogs.operation_name: Sign-in activity</strong>.</p>
+                    <p>This will cut our shown logs in half. Next, we can take a look at the first event coming from Germany, we see that the identity tied to the signinlogs is <strong>Alice</strong>. Giving us the answer to question 3!</p>
+                    <hr class="divider">
+
+
+                <h3>Q4: To gain insights into the attacker's tactics and enumeration strategy, what is the name of the script file the attacker accessed within blob storage?</h3>
+                    <p>This question requires us to begin looking into logs related to blob storage. In order to filter for these logs we can use the filter: </p>
+                    <pre><code>
+azure-eventhub.eventhub: bloblogs
+                    </code></pre>
+                    <p>This will give us around 140 logs back that are related to blob storage. The next thing I needed to figure out what what kind of blob operation name related to accessing a blob storage as per the question.</p>
+                    <p>This ended up being a lot of trial and error into looking at a bunch of logs and seeing what changes between each of them but ultimately I found that if we add this filter: </p>
+                    <pre><code>
+azure.eventhub.operationName: GetBlob
+                    </code></pre>
+                    <p>With this additional filter we are now left with 4 logs which are easy to go through and manually identify the script file the attacker attempted to access. Lets take a look at the first listed log below.</p>
+                    <img src="../../../images/cyberdefenders/azurehunt/elastic-search-getblob-filter.png">
+                    <img src="../../../images/cyberdefenders/azurehunt/elastic-search-getblob.png">
+
+                    <p>Looking at the <strong>objectKey</strong> field we can see there is a PowerShell (.PS1) script file listed. Giving us our answer to question 4.</p>
+                    <hr class="divider">
+
+                    
+                <h3>Q5: For a detailed analysis of the attacker's actions, what is the name of the storage account housing the script file?</h3>
+                    <p>Going off of the same log we were looking at for the previous question. We can identify the name of the storage account that is housing the script.</p>
+                    <p>You can identify it from a number of places, such as the root of the <strong>objectKey</strong>, <strong>azure.resource.name</strong>, and specifically the <strong>azure.eventhub.properties.accountName</strong>. Any of these three fields would give us the answer to question 5!</p>
+                    <hr class="divider">
+
+
+                <h3>Q6: Tracing the attacker's movements across our infrastructure, what is the User Principal Name (UPN) of the second user account the attacker compromised?</h3>
+                    <p>Based on the question we know we're done looking at Blob Storage for the moment. If we apply our previous filter to only see Germany logs we can begin to look for another user whose account was compromised.</p>
+                    <p>Utilizing the same structure as before I sorted the logs by Old-New and then setup a filter to not show logs where the <strong>azure.signinlogs.identity</strong> was set to Alice (The name of the first account that was compromised).</p>
+                    <p>Taking a look at the first log that was returned, we can take a look at the identity and it shows as <strong>IT Admin</strong> giving us the name of the second user account compromised.</p>
+                    <p>However we're not done yet, we need to find the User Principal Name (UPN) for the user. We can go through more of the log until we come across the field: <strong>azure.signinlogs.properties.user_prinicpal_name</strong> giving us the answer to question 6!</p>
+                    <img src="../../../images/cyberdefenders/azurehunt/elastic-search-2nduser-filter.png">
+                    <img src="../../../images/cyberdefenders/azurehunt/elastic-search-2nduser.png">
+                    
+                    <hr class="divider">
+
+
+                <h3>Q7: Analyzing the attacker's impact on our environment, what is the name of the Virtual Machine (VM) the attacker started?</h3>
+                    <p>Now we need to identify activity around the attacker starting up a Virtual Machine. Without any knowledge of how virtual machine fields are labeled in elastic I simply put "<strong>virtual</strong>" into the query bar and got back 7 logs surrounding resources being allocated, deallocated, and VMs being started!</p>
+                    <p>After playing around with different filters as well, it seems you can look at any log involving VMs by using the following filter:</p>
+                    <pre><code>
+azure.resource.provider: MICROSOFT.COMPUTE/VIRTUALMACHINES
+                    </code></pre>
+                    <img src="../../../images/cyberdefenders/azurehunt/elastic-search-vm.png">
+                    <p>As we can see above, we can identify the name of the VM that was launched. Giving us the answer to question 7!</p>
+                    
+                    <hr class="divider">
+
+
+                <h3>Q8: To assess the potential data exposure, what is the name of the database exported?</h3>
+                    <p>We can take a very similar approach to finding logs related to the database as we did with Q7. I started off by looking for any keywords surrounding: database and SQL but didn't find any logs that provided what we were looking for.</p>
+                    <p>Next I used some more context for the question and searched for <strong>export</strong> within our query. This returns 2 logs that contain the field:<br><strong>azure.activitylogs.operation_name: MICROSOFT.SQL/SERVERS/DATABASES/EXPORT/ACTION</strong></p>
+                    <p>We can look further into this log to try and identify the name of the database that was exported:</p>
+                    <img src="../../../images/cyberdefenders/azurehunt/elastic-search-export.png">
+                    <p>As we can see above, this log will provide us with the name of the database. Giving us the answer to question 8!</p>
+                    
+                    <hr class="divider">
+
+
+                <h3>Q9: In your pursuit of uncovering persistence techniques, what is the display name associated with the user account you have discovered?</h3>
+                    <p>Now we are looking for some form of a persistent technique used by the attacker associated with a user account. Using context clues, I assumed this has to do with creating a user.</p>
+                    <p>However, I couldn't determine the name of the field that would be used to check for adding a user. Going back to the <strong>Visual Library</strong> I added a field to display fields related to display_names. That resulted in this graph:</p>
+                    <img src="../../../images/cyberdefenders/azurehunt/elastic-search-newuser-graph.png">
+                    <p>From the graph I noticed that there was a property equal to "Add User" so I went back to Discover and searched with the following query:</p>
+                    <pre><code>
+azure.auditlogs.properties.activity_display_name.keyword: Add user
+                    </code></pre>
+                    <p>This resulted in a log that gave us the user that was created by our attacker.</p>
+                    <img src="../../../images/cyberdefenders/azurehunt/elastic-search-newuser.png">
+                    <p>From this image we can determine the display name of the user account that was created. Giving us the answer to question 9!</p>
+                    
+                    <hr class="divider">
+
+                <h3>Q10: The attacker utilized a compromised account to assign a new role. What role was granted?</h3>
+                    <p>This question requires that we find the role that was assigned by a compromised account.</p>
+                    <p>In order to try and identify where we may be able to see roles within a log I searched for any fields involving <strong>role</strong>.</p>
+                    <p>This led me to finding the field:</p>
+                    <pre><code>
+azure.activitylogs.identity.authoization.evidence.role
+                    </code></pre>
+                    <p>From clicking on the field name elastic will perform a quick enumeration of the logs and gather what this field was set to. There I noticed that there was the roles user and <strong>owner</strong>.</p>
+                    <p>So I then filtered the logs by that field including the value of Owner and it gave us two logs. These logs showed our compromised user account IT Admin assigning the role of Owner.</p>
+                    <img src="../../../images/cyberdefenders/azurehunt/elastic-search-role.png">
+                    <p>As we can see in the image we have the name of the role assigned, the user that did it, and the action type being defined as a role assignment. Giving us the answer to question 10!</p>
+                    
+                    <hr class="divider">
+
+
+                <h3>Q11: For a comprehensive timeline and understanding of the breach progression, What is the timestamp of the first successful login recorded for this user account?</h3>
+                    <p>Wrapping up this analysis, we are tasked with determing the timestamp of the first successful login of the attacker created user account.</p>
+                    <p>To obtain this, we can do a filter for our user account. I used this filter: <strong>user.name.keyword: it_support</strong></p>
+                    <p>If we then sort by Old-New and look at the first log we can see that it relates to a successful logon attempt, giving us our answer to question 11 and completing this lab!</p>
+                    <img src="../../../images/cyberdefenders/azurehunt/elastic-search-initiallogon.png">
+                    <img src="../../../images/cyberdefenders/azurehunt/elastic-search-initiallogon-log.png">
+                                        
+                    <hr class="divider">
+
+
+                <h2>Conclusion</h2>
+                    <p>You have now successfully completed the Cyberdefenders AzureHunt lab!</p>
+                    <p>I hope this Writeup was able to teach out something or atleast give you another way to approach solving labs where you're not sure where to start.</p>
+                    <p>I know at the start this lab gave me a lot of trouble. Working with new applications you're not used to can be daunting! Always try your best to be patient and leave room for curiosity and I'm sure there's nothing you can't figure out!</p>
+                    <br>
+                    <p>So please take care, take some time to learn something new, and happy game hacking!</p>
+                    <p>NitoTech</p>
+                <hr>
+
+                <h2>Additional Resources:</h2>
+                        <a href="https://www.elastic.co/">Want to learn more about Elastic?</a>
+                        <br><br>
+                        <a href="https://cyberdefenders.org/walkthroughs/azurehunt/">Cyberdefenders Official AzureHunt Walkthrough</a>
+                        <br><br>
+                        <a href="https://cyberdefenders.org/blueteam-ctf-challenges/azurehunt/">AzureHunt Lab</a>
+                        <br><br>
+            </div>
+        </div>
+    </body>
+</html>

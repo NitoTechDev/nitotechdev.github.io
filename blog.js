@@ -16,6 +16,7 @@ const popupDescripters = {
     "user-agents":"A computer program representing a person, such as a download manager, another application, or a browser.",
     "zeek":"An open-source network security monitoring tool.",
     "cloudtrail":"A service that enables governance, compliance, operaitonal auditing, and auditing of AWS accounts. Allowing you to track user activity and API usage on AWS.",
+    "elastic":"An open-source platform for search, observability, and security that utilizes a variety of AI implementations to increase its analytic capabilities.",
 };
 
 document.addEventListener("DOMContentLoaded", () => {
