@@ -1,5 +1,12 @@
 const posts = [
     {
+        "title": "Raspberry Pi Christmas Slot Machine",
+        "description": "Christmas themed slot machine hosted on a Raspberry Pi",
+        "date": "Dec 28, 2025",
+        "link": "./posts/raspberry-pi-christmas-slot-machine",
+        "image": "./images/christmas-project/gamescreen.png"
+    },
+    {
         "title": "AzureHunt - Writeup",
         "description": "Cyberdefenders AzureHunt Lab Walkthrough",
         "date": "Dec 2, 2025",

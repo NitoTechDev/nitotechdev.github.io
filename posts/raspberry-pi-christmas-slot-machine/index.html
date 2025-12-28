@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+    <title>NitoTech | Raspberry Pi Christmas Slot Machine</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../../index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <script src="../../../blog.js"></script>
+    <body>
+        <div class="header poppins-regular">
+            <h1>NitoTech</h1>
+            <p>Game Vulnerability Researcher | Anti-Cheat Enthusiast</p>
+        </div>
+
+        <div class="navbar">
+            <a href="../../index.html">Home</a>
+            <a href="../../posts.html">Posts</a>
+            <a href="../../contact.html" class="right">Contact</a>
+        </div>
+
+        <div class="row">
+            <div class="blog-side">
+                <h2>Check out my <br>other Posts!</h2>
+                <h3>My Favorite Projects</h3>
+                <p>Here are some of my favorite projects I've worked on</p>
+                <div class="mini-posts"><a href="#HackingNioh">Nioh Hack<br>(Under Revisions)</a></div><br>
+                <div class="mini-posts"><a href="#SMAT">Static Malware Analysis Tool<br>(Blog in Development)</a></div><br>
+                <div class="mini-posts"><a href="../how-do-cheat-overlays-work/">Direct3D 9 Overlay Concepts</a></div>
+            </div>
+            <div class="blog-main">
+                <h1>Raspberry Pi Christmas Slot Machine</h1>
+                <h5>Dec 28, 2025 | Christmas themed slot machine hosted on a Raspberry Pi</h5>
+                <hr>
+                <h2>Introduction</h2>
+                    <p>
+                      Have you ever wanted to create your own slot machine? and maybe you've wanted to create a physical project utilizing a Raspberry Pi. Those were some of the thoughts I was having when I started creating a Christmas themed slot machine for 
+                      my families yearly Christmas Eve party. Every year we have a game that someone in the family creates and in past years it has been physical games such as custom made beer pong, skee-ball and more. This year I wanted to take charge of making
+                      the game. Below, I will explain everything I needed to create the project, how it works, and provide a link to my GitHub so you can utilize this yourself!
+                    </p>
+
+                    <p><strong>Please hover over any words highlighted in purple to get a description of what they mean!</strong></p>
+                    <hr class="divider">
+
+
+                <h2>Software</h2>
+                    <p>To start, lets talk about how the code was written for the Slot Machine. I utilized <span class="hover-word">Pygame</span> in order to write the game. Pygame alone covers about 95% of all the coding that is involved with making this game in Python and is definitely something I recommend checking out if you're interested in making a game as well.</p>
+                    <p>Huge shoutout to <a href="https://www.youtube.com/@NotaSWE">Not a Software Engineer</a>. When I first started, I watched a video they had created on making a slot machine in Python. This video covers how slot machines work in general, not just in Python. As well as what kind of things we need to utilize in order to simulate a slot machine. Which layed the foundation for my own project.</p>
+                    <p>Once I had a solid foundation of how Pygame and slot machines worked. I began designing my background, fonts, and slot designs. I utilized Aseprite to create pixel art for the game. You can find it on Steam for less than $10 or use any other software to create art that you like.</p>
+                    <p>The only other python libraries that were utilized was Pyserial. This library was needed in order to interact with my Arduino that I had set up with an infrared break beam to detect when coins had been inserted. I'll talk more about the Arduino setup in the Hardware section.</p>
+                    <p>I will give a very high level view of how the game works below with some pseudo code of the games flow.</p>
+                    <ol>
+                        <li>Game starts -> First player is selected.</li>
+                        <li>Player inputs coins representing their bet amount for the round.</li>
+                        <li>Player presses the spin button -> All three symbols rows spin and pull random symbols that filter in to make the new 'board'.</li>
+                        <li>If a match was made, a screen appears with a challenge for the player and a confirmation or failure button to indicate if they passed the challenge.</li>
+                        <li>Depending on if they passed or failed specific multipliers are applied and points are added to the current player.</li>
+                        <li>Game rotates to the next player and the process repeats itself until a player has reached a specific point amount indicating a victory or only one player is left in the game.</li>
+                        <li>Restart screen is presented to see if players want to play again.</li>
+                    </ol>
+                    <p>I'm sure that description may leave a lot to be desired so I will provide some picture of how the game looks below. When the game was actually ran, I had symbols of a Christmas Tree, Reeth, and Ornament. However that art isn't mine and was largely influenced from art I found online so I won't include it in my images below.</p>
+                    <br>
+                    <p>Here is the base game screen that loads at the start of every new game.</p>
+                    <img src="../../images/christmas-project/gamescreen.png">
+                    <br>
+                    <br>
+
+                    <br>
+                    <p>Here is a challenge screen. This appeared whenever any player that rolled got a match.</p>
+                    <img src="../../images/christmas-project/challenge.png">
+                    <br>
+
+                    <p>Hopefully these images help paint a picture of how the game looked and flowed. Below I will speak on the hardware setup I had running for this.</p>
+                    <hr class="divider">
+                
+                <h2>Hardware</h2>
+                    <p>After all the code was written I ported it over to the hardware and began my own personal headache which was getting it to work physically. I will list out all the issues I ran into below so that hopefully if you face any of these issues you wont spend hours fixing them like I did.</p>
+                    <p>Main hardware used:</p>
+                    <ol>
+                        <li><a href="https://www.amazon.com/Raspberry-Model-2019-Quad-Bluetooth/dp/B07TC2BK1X/ref=sr_1_2?crid=2V0AQYUUOG660&dib=eyJ2IjoiMSJ9.d-31SreUtdmDEk0eRR1lwcovsbmv_xvWfDZz-ziMjIkfdTS4pr_55N4uBsdWFVWPVLa0oTy37cqXmxyEFNUlDhbwX_nwEGcsn9maXeSsadmKDTjcAkrNOnYhKW2hjFjedJJSQqJ3SiJOz8gBU1XgPIe8VNI_2nZEfIq7V2gYbeaiMouaW6ECfOzTGv3PyYslXhEkoAbq6OG-gez7xCNO5KbWf8PaRzS9_C9aZEZkTqE.7Y2Z093HAlHqLza9rT85ijS5-tFggQ6IfbY2EB_6-gY&dib_tag=se&keywords=Raspberry%2Bpi%2B4&qid=1766959838&sprefix=raspberry%2Bp%2Caps%2C376&sr=8-2&th=1">Raspberry Pi 4b</a></li>
+                        <li><a href="https://www.amazon.com/ELEGOO-Project-Tutorial-Controller-Projects/dp/B01D8KOZF4/ref=sr_1_13?crid=19Y1HI2P42BJY&dib=eyJ2IjoiMSJ9.XbKE6b0NGJdls38suMJhLeNAeCCWzOXR6caiVijwEK0k3soZsrqcMmmniJVNykeI0iPbqnbIDM9xOu-Ru_DP0ugdTCw2p8WSlloXH8Culw63hI71I_HzibuuqrYSkPnzSjjUhTolZVXYc9aSQOIUTZvaaKM5DNYC0RQ4w8r27-wa7pF4nGxS3pcSCl2vRLLGPrkANNTg8jJIwrzHJsFsZhVc1lKDfugGIFJssIcCm1g.ehz_wfbebkEO2KojVwi4b5BELAVAnW2ZuoHS3CflPSs&dib_tag=se&keywords=Arduino+uno&qid=1766959979&sprefix=arduino+uno%2Caps%2C142&sr=8-13">Arduino Uno</a></li>
+                        <li><a href="amazon.com/Anker-Travel-Ready-Technology-High-Speed-Output(Black),1pack/dp/B0D5CLSMFB/ref=sr_1_3?crid=3LIY55PV1ZRKJ&dib=eyJ2IjoiMSJ9.NVISRbUFWYnAxP4nWFpYasI-aJOV8ToQFlpZCQ-4D62yjMyU_Z90zqje55wSDjRcqGdb__Me8C9Ee_dc3qBJMPuaeJVOayqcIrbAuDMMwMamnqRbX2GYYXHACcltKn18Fjwwkf0EhiUDBoRHHbWOsrCb2zl5tOtLa4_mQ4NE40MOCq6BSCAKj2nNi43e1iUZwQzjO0qS9GV134tnbeWpHGlwv6rAInR-ggst0c7FxPU.MitXDdH524MpKTmCrsRdFoGB4uZOs_3KN3JdUeoSjXA&dib_tag=se&keywords=battery+pack&qid=1766959997&sprefix=battery+pac%2Caps%2C148&sr=8-3">Lithium ion battery pack</a></li>
+                        <li><a href="amazon.com/Hosyond-Display-1024x600-Capacitive-Raspberry/dp/B09XKC53NH/ref=sr_1_4?crid=K3CTVJMIMWEF&dib=eyJ2IjoiMSJ9._SRAQXwwkO51Jx-oBQsyctWfGHBmKwUAcl5OYJwJSs-Eentrk8iSJh8AnxfgyTvAnaK2OVXcjVW2A91NmLuAGVXcCBRRSETT3027yeNSBJeJ0z4qSdiuFWt33bTWMhZvoM3wVoQtTxnweQOEpHc5nQm5ZDLF5rCfDaL2NhOvP0TH4U7swPM8irF-thHjz6gIs2LmvdrugosfN8f84l3FWsD0GAl8dwOb_Y7bT7Ng4gM.zSRbmm_FEp4sLrHmj57RRQgb8HF1dEO5-zpAonstn40&dib_tag=se&keywords=raspberry+pi+7+inch+touch+screen&qid=1766960150&sprefix=raspberry+pi+7+inch+touch+screen%2Caps%2C135&sr=8-4">Hosyound 7 inch PSI LCS Touch Screen Display Panel</a></li>
+                        <li><a href="https://www.adafruit.com/product/2168?srsltid=AfmBOopqYpvPjb1vhDcQ6owoBN_l7xUZV4yiQq3ZgB8xUaqq2x3cGazf">Infrared break beam sensors</a></li>
+                    </ol>
+
+                    <p>If you don't have some already you'll need:</p>
+                    <ol>
+                        <li>Breadboard</li>
+                        <li>HDMI to Mini-HDMI adapter or cable</li>
+                        <li>Micro SD card + adapter</li>
+                        <li>USB to Serial cable</li>
+                        <li><a href="https://www.amazon.com/dp/B0D5SP8RN7?ref=fed_asin_title&th=1">Poker chips</a></li>
+                    </ol>
+
+                    <p>A bit of a long list but that should cover just about everything you need for the project.</p>
+
+                <h3>Raspberry Pi</h3>
+                    <p>The first thing we need to do is flash our Micro-SD card with the most recent installation of Raspberry pi OS. There are probably other ones you can use but I am not familiar with them and this is what I choose: <a href="imager">https://www.raspberrypi.com/software/</a></p>
+                    <p>Afterwards, we can insert the Micro-SD card. Then plug in our keyboard, monitor, mouse, and power cable and power on our Raspberry Pi. Depending on how you ran the installer you may have some initial setup you have to go through but outside of that you should be good.</p>
+                    <p>I was unable to tell if the issue I'm about to cover is for the Hoyound 7 inch monitor specifically. However, if you are seeing an issue where your resolution isn't setup properly. Once booted up, you need to go into <strong>/boot/firmware/config.txt</strong> and change this line:</p>
+                    <pre><code>
+dtoverlay=vc4-kms-v3d -> dtoverlay=vc4-fkms-v3d
+                    </code></pre>
+                    <p>Incase your eye doesn't catch the change, we are adding an f infromt of the kms-v3d. This changes how visuals work on the raspberry pi and allowed mine to finally detect the monitor's proper length and height and allow me to setup the resolution properly.</p>
+                    <p>Outside of that you can then proceed to port the code into your Pi whether by USB or connecting to your email and downloading there. Whichever works best for you!</p>
+                    <p>You'll need to setup a venv environment and pip install Pygame and Pyserial so that the code will run properly and make sure that when you run your program you are running it from within the venv environment. After that, we should be done with the Raspberry Pi setup.</p>
+                
+                <h3>Arduino</h3>
+                    <p>Last thing we have to setup now is the arduino. To start you'll want to make sure you have your USB to Serial cable so that you can connect the Arduino to your computer. Then install the <a href="https://www.arduino.cc/en/software/">Arduino application</a> and open up the IDE so that you can write the code that will interact with the Arduino.</p>
+                    <p>Please keep in mind, that while not listed here, the code will be in my GitHub which will be linked at the bottom of this article.</p>
+                    <p>Upload the software to the Arduino then you can assemble the break beam sensors on the Arduino. I followed a great article from Adafruit on this which you can find here: <a href="https://learn.adafruit.com/ir-breakbeam-sensors/arduino">Adafruit: IR Break Beam</a></p>
+                    <p>The only thing you may need to change in the actual slot machine code itself is the directory or name for the Serial port connected to the Arduino.</p>
+
+                <h3>Finishing touches</h3>
+                    <p>Outside of that, after you put together the Arduino and your RaspberryPi is setup, you can take the USB to Serial cable and plug them into the respective devices and launch the program.</p>
+                    <p>At this point, the program should launch as expected and not throw any errors. If errors do come up please inspect the errors and debug as per the error message or online forums on the error.</p>
+                    <p>Keep in mind that the monitor is touch screen so once launched, you shouldn't need a keyboard and mouse plugged in to utilize the game. If you run into a weird issue with the screen not detecting input, simply plug in the mouse touch the screen and then you can unplug the mouse.</p>
+                    <hr class="divider">
+
+                <br>
+                <p>Here's a look at how my project turned out with a box created for it.</p>
+                <img src="../../images/christmas-project/physical.png">
+
+
+                <h2>Conclusion</h2>
+                    <p>That completes the Christmas Themed Slot Machine that I created this holiday season. This project took a lot longer than I initially anticipated. Making something that multiple people will be using and are supposed to find enjoyable was a lot harder than I suspected.</p>
+                    <p>Designing an application that can fit a whole bunch of use cases, designing challenges for players that can't do physical activities, and learning how to make a game took a bunch of time and seeing it through was challenging.</p>
+                    <p>However, with that in mind it is something that I look back on and am super proud of myself for taking on, and even more proud that I saw it all the way through as there were so many times I tried to convince myself that it wasn't going to work.</p>
+                    <p>I truly believe that with enough time and effort anything that any of us dream of is possible. So keep your heads held high as we all dive back into our long hours of debugging and I hope you are able to find some comfort in the struggle knowing that you are working on something that you care about.</p>
+                    <br>
+                    <p>Please take care, take some time to learn something new, and happy game hacking!</p>
+                    <p>NitoTech</p>
+                <hr>
+
+                <h2>GitHub Link to the Project</h2>
+                    <a href="https://github.com/NitoTechDev/christmas-slot-machine">Christmas Slot Machine</a>
+                    <p>Within <strong>Main.py</strong> and <strong>Machine.py</strong> you'll need to go through and uncomment all the comments that are aligned with reading from the Arduino. They are commented out so that you can work on the code without needing to have it plugged in.</p>
+
+                <h2>Additional Resources:</h2>
+                        <a href="https://www.youtube.com/watch?v=hnTrectlTxM&t=1s">Not a Software Engineer Youtube Video</a>
+                        <br><br>
+                        
+            </div>
+        </div>
+    </body>
+</html>

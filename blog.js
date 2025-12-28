@@ -17,6 +17,7 @@ const popupDescripters = {
     "zeek":"An open-source network security monitoring tool.",
     "cloudtrail":"A service that enables governance, compliance, operaitonal auditing, and auditing of AWS accounts. Allowing you to track user activity and API usage on AWS.",
     "elastic":"An open-source platform for search, observability, and security that utilizes a variety of AI implementations to increase its analytic capabilities.",
+    "pygame":"Python Library for making 2d video games and multimedia applications. Provides modules for graphics, sounds, and user input.",
 };
 
 document.addEventListener("DOMContentLoaded", () => {
