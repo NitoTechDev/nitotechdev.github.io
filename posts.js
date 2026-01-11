@@ -1,5 +1,12 @@
 const posts = [
     {
+        "title": "What is Fuzzing - Concept Study",
+        "description": "Concept study on Fuzzing",
+        "date": "Jan 11, 2026",
+        "link": "./posts/what-is-fuzzing",
+        "image": "./images/logos/WhatisFuzzingLogo.png"
+    },
+    {
         "title": "Raspberry Pi Christmas Slot Machine",
         "description": "Christmas themed slot machine hosted on a Raspberry Pi",
         "date": "Dec 28, 2025",

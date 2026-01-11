@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <title>NitoTech | What is fuzzing?</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../../index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <script src="../../../blog.js"></script>
+    <body>
+        <div class="header poppins-regular">
+            <h1>NitoTech</h1>
+            <p>Game Vulnerability Researcher | Anti-Cheat Enthusiast</p>
+        </div>
+
+        <div class="navbar">
+            <a href="../../index.html">Home</a>
+            <a href="../../posts.html">Posts</a>
+            <a href="../../contact.html" class="right">Contact</a>
+        </div>
+
+        <div class="row">
+            <div class="blog-side">
+                <h2>Check out my <br>other Posts!</h2>
+                <h3>My Favorite Projects</h3>
+                <p>Here are some of my favorite projects I've worked on</p>
+                <div class="mini-posts"><a href="#HackingNioh">Nioh Hack<br>(Under Revisions)</a></div><br>
+                <div class="mini-posts"><a href="#SMAT">Static Malware Analysis Tool<br>(Blog in Development)</a></div><br>
+                <div class="mini-posts"><a href="../how-do-cheat-overlays-work/">Direct3D 9 Overlay Concepts</a></div>
+            </div>
+            <div class="blog-main">
+                <h1>What is fuzzing?</h1>
+                <h5>Jan 11, 2026 | Concept study on Fuzzing</h5>
+                <hr>
+                <h2>Introduction</h2>
+                    <p>
+                      Recently I started taking a course on vulnerability research. Specifically on learning how to find and potentially exploit Zero-days. This course has been super fun so far, and it's nice to have structured resources available to learn from.
+                      One of the concepts I learned about recently was grammar-based fuzzing. I had heard of fuzzing in the past but it wasn't anything that I was familiar with enough to understand how it's used. So in an attempt to gain a better understanding, I'm writing this blog post!
+                    </p>
+
+                    <p>Below, you will find my research on fuzzing, primarily on what is fuzzing, what is it used for, and what kind of software does it target.</p>
+
+                    <p><strong>Please hover over any words highlighted in purple to get a description of what they mean!</strong></p>
+                    <hr class="divider">
+
+                <h2>What is fuzzing?</h2>
+                    <p>Fuzzing, is a software testing technique that assist in finding vulnerabilities and defects in a given software. This is done through providing random inputs into the program to try and achieve a specific outcome. These outcomes can range from a software crashing, providing output, privilege escalation, and more.</p>
+                    <p>With that in mind lets talk about one of the most important pieces of fuzzing, input.</p>
+
+                <h3>What is input in fuzzing?</h3>
+                    <p>Input, is what the fuzzing tool is providing to the software in order to produce an outcome. Input can come in many forms, it can be completely random characters, malformed input, syntax specific output and more.</p>
+                    <p>Input is determined by the type of fuzzing you want to perform. A few examples are grammar-based, coverage-guided, and unguided fuzzing. Each type of fuzzing is used for specific kinds of environments and uses different kinds of input.</p>
+                    <ul>
+                        <li>Grammar-based fuzzing - Improves test/code coverage by specifying the grammar of semi-valid inputs. Uses syntax specific inputs.</li><br>
+                        <li>Coverage-guided fuzzing - Improves each itteration of testing by making informed decision on each tests output. Guiding the input to move closer to the desired outcome for that program.</li><br>
+                        <li>Unguided fuzzing - Unlike other forms of fuzzing, this fuzzing technique takes completly random input as well as malformed input. Not relying on any guidance or specific coverage techniques.</li>
+                    </ul>
+
+                <h2>What is fuzzing used for?</h2>
+                    <p>Fuzzing is used for several things. It can help software developers with finding potential security risks they haven't thought of yet. It assists with validating input fields to prevent exploitation. When it comes to cybersecurity, fuzzing is used by red teamers, blue teamers, and malcious hackers alike to attempt to find security vulnerabilities and zero days in a given application.</p>
+                    <p>Since fuzzing is primarily an automative technique, it saves time for developers and cybersecurity practitioners alike while unconvering bugs that other testing methods may not be able to find.</p>
+
+                <h2>What kinds of software does fuzzing target?</h2>
+                    <p>Fuzzing tools test softwares that rely on user and external inputs. This can include a variety of software, such as: </p> 
+                    <ul>
+                        <li>Web / Mobile apps</li>
+                        <li>Operating systems</li>
+                        <li>APIs</li>
+                        <li>PDF readers</li>
+                        <li>Compilers</li>
+                        <li>and more...</li>
+                    </ul>
+                    <p>Depending on the type of software you are targeting you'd use a respective fuzzing technique. As mentioned earlier, if you were attempting to fuze a C# compiler. You'd then want to rely on a grammar-based fuzzer that uses syntax specific input so you don't waste time with input that wouldn't work with the compiler in the first place.</p>
+
+                <h2>Conclusion</h2>
+                    <p>For now, that completes my concept study of fuzzing. While it is short blog this time. This provides us with a high-level understanding of what fuzzing is, what it can do, and what kind of applications fuzzers target. Throughout the next week or so, I'll be gaining some more hands on experience with fuzzers.</p>
+                    <p>At that time, I'll come back and write a follow up blog on what I learned, if some things I stated here don't line up with what experience I gained, and how you all can use fuzzers as well!</p>
+                    <br>
+                    <p>Please take care, take some time to learn something new, and happy game hacking!</p>
+                    <p>NitoTech</p>
+                <hr>
+
+                <h2>Additional Resources:</h2>
+                        <a href="https://www.blackduck.com/glossary/what-is-fuzz-testing.html">Black Duck - What is fuzz testing?</a>
+                        <a href="https://about.gitlab.com/topics/devsecops/what-is-fuzz-testing/">Gitlab - What is fuzz testing?</a>
+                        <a href="https://www.imperva.com/learn/application-security/fuzzing-fuzz-testing/">Imperva - Fuzzing</a>
+                        <a href="https://github.com/nautilus-fuzz/nautilus">Nautilus - Grammer-based fuzzer</a>
+                        <br><br>
+                        
+            </div>
+        </div>
+    </body>
+</html>
