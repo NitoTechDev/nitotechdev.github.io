@@ -85,15 +85,21 @@ body {
 
 /* Side column for blog posts */
 .blog-side {
-    flex: 20%;
+    flex: 12.5%;
     background-color: #f1f1f1;
     padding: 20px;
 }
 
 /* Main column for blog posts */
 .blog-main {  
-    flex: 80%;
+    flex: 67.5%;
     background-color: white;
+    padding: 20px;
+}
+
+#toc {
+    flex: 20%;
+    background-color: #f1f1f1;
     padding: 20px;
 }
 
@@ -246,7 +252,92 @@ body {
     max-width: 500px;
 }
 
+/* --------------------------------------------- */
+/* TOC Styles */
+#toc {
+    font-size: 15px;
+}
 
+#toc p {
+    margin-bottom: 0;
+}
+
+#toc ul {
+    list-style: none;
+    line-height: 2em;
+}
+
+#toc-list {
+    margin-top: 0;
+}
+
+summary {
+    cursor: pointer;
+}
+
+summary::marker {
+    content: "";
+}
+
+summary::-webkit-details-marker {
+    display: none;
+}
+
+#toc ul li {
+    position: relative;
+    /* outline: 1px solid green; */
+}
+
+#toc ul li:last-child::after {
+    display: none;
+}
+
+ul.toc-list > li:after, ul.toc-list > li:before{
+    display: none;
+}
+
+#toc ul li::before {
+    position: absolute;
+    left: -10px;
+    top: 0px;
+    border-left: 2px solid gray;
+    border-bottom: 2px solid gray;
+    content: "";
+    width: 8px;
+    height: 1em;
+}
+
+#toc ul li::after {
+    position: absolute;
+    left: -10px;
+    bottom: 0px;
+    border-left: 2px solid gray;
+    content: "";
+    width: 8px;
+    height: 100%;
+}
+
+#toc ul summary::before {
+    position: absolute;
+    left: -1.225em;
+    top: .625em;
+    content: "+";
+    background: rgb(0, 160, 0);
+    display: block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50em;
+    z-index: 999;
+    text-align: center;
+    color: white;
+    line-height: 1em;
+}
+
+#toc ul details[open] > summary::before {
+    content: "-";
+    line-height: .8em;
+
+}
 
 /* --------------------------------------------- */
 /* Code Insert Styles */
@@ -267,19 +358,21 @@ code {
   color: #333; /* Darker text color */
 }
 
-
-
 /* --------------------------------------------- */
 /* Responsive Layout */
 
 /* Responsive layout - when the screen is less than 1150px wide, change the flex width for both the blog side and blog main to adjust for words being too close */
 @media screen and (max-width: 1150px) {
     .blog-side {
-        flex: 25%;
+        flex: 20%;
     }
 
     .blog-main {
-        flex: 75%;
+        flex: 70%;
+    }
+
+    #toc {
+        flex: 10%;
     }
 }
 
@@ -298,9 +391,9 @@ code {
     }
 }
 
-@media screen and (min-width: 1600px) {
+@media screen and (min-width: 2600px) {
     .row {
-        max-width: 1600px;
+        max-width: 2600px;
         margin: auto;
     }
 }
