@@ -38,6 +38,7 @@ body {
 .navbar {
     overflow: hidden;
     background-color: #333;
+    color: white;
 }
 
 .navbar a {
@@ -97,7 +98,7 @@ body {
     padding: 20px;
 }
 
-#toc {
+#tocContainer {
     flex: 20%;
     background-color: #f1f1f1;
     padding: 20px;
@@ -256,6 +257,8 @@ body {
 /* TOC Styles */
 #toc {
     font-size: 15px;
+    position: sticky;
+    top: 30px;
 }
 
 #toc p {
@@ -339,6 +342,15 @@ ul.toc-list > li:after, ul.toc-list > li:before{
 
 }
 
+#toc a {
+    outline: none;
+    text-decoration: none;
+}
+
+#toc a:link, #toc a:visited {
+    color: black;
+}
+
 /* --------------------------------------------- */
 /* Code Insert Styles */
 
@@ -371,7 +383,7 @@ code {
         flex: 70%;
     }
 
-    #toc {
+    #tocContainer {
         flex: 10%;
     }
 }

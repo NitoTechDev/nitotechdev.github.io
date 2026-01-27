@@ -34,7 +34,7 @@
                 <h1>How do Cheat Overlays Work? (Direct3D 9 Overlay Concept)</h1>
                 <h5>Sep 14, 2025 | Direct3D 9 Overlay Concept</h5>
                 <hr>
-                <h2>Introduction</h2>
+                <h2 id="introduction">Introduction</h2>
                     <p>
                         Have you ever wanted to create an overlay for your cheats and wern't sure where to start? Keep reading, and I will show you how to setup your environment 
                         as well as the concepts behind creating an overlay.
@@ -48,7 +48,7 @@
                     </p>
                     <p><strong>Please hover over any words highlighted in purple to get a description of what they mean!</strong></p>
                 
-                <h2>What is required to create an overlay?</h2>
+                <h2 id="create-an-overlay">What is required to create an overlay?</h2>
                     <p>
                         Things you need:
                     </p>
@@ -58,7 +58,7 @@
                         <li><span class="hover-word">IDE</span> that is setup for Direct3D's includes and libraries</li>
                     </ul>
                 
-                <h3>Identifying what graphics API your game uses</h3>
+                <h3 id="which-graphics-api">Identifying what graphics API your game uses</h3>
                     <p>
                         While some games may make the graphics <span class="hover-word">API</span> it uses obvious through launch options, checking the games imports, or by other means. 
                         Sometimes it can be difficult to identify what <span class="hover-word">graphics API</span> a game is using.
@@ -83,7 +83,7 @@
                         <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3223284929">How to find out a game's rendering API with MSI Afterburner</a>
                     </p>
 
-                <h3>Downloading the SDK</h3>
+                <h3 id="sdk">Downloading the SDK</h3>
                     <p>You can download the SDK from here: <a href="https://www.microsoft.com/en-us/download/details.aspx?id=6812">Microsoft legacy SDK download</a></p>
                     <p>
                         The SDK has already reached it's End of Life and is no longer supported. If you run into any issues installing the SDK it's usually 
@@ -94,7 +94,7 @@
                         included with this installer
                     </p>
 
-                <h3>Setting up your IDE</h3>
+                <h3 id="IDE">Setting up your IDE</h3>
                     <p>Within your IDE of choice (I use Visual Studio, so the following instructions are for that IDE)</p>
                     <ol>
                         <li>You can right click on your solution and go to <strong>properties</strong></li>
@@ -107,9 +107,9 @@
                     </ol>
                     <p><strong>These instructions assume you already have a solution created for your cheat.</strong></p>
                 
-                <h2>How does a Direct3D overlay work?</h2>
+                <h2 id="direct3D">How does a Direct3D overlay work?</h2>
 
-                <h3>What does a Graphics API do?</h3>
+                <h3 id="what-graphics-api-do">What does a Graphics API do?</h3>
                     <p>Before we create our overlay it's important to understand how it works before hand!</p>
                     <p>
                         Direct3D 9 is a Graphics API, that allows us to utilize commands to communicate and control a GPU in order to render images, 2D, and 3D graphics on our screens.
@@ -123,7 +123,7 @@
                         whichever applications we are creating an overlay for uses the same API.
                     </p>
 
-                <h3>Gathering information about the screen</h3>
+                <h3 id="gather-screen-info">Gathering information about the screen</h3>
                     <p>
                         After we have confirmed that our application uses the same API, we have to gather information about the screen we're rendering to. That can look like something like this:
                     </p>
@@ -151,7 +151,7 @@ void Overlay::getGameWindowInfo()
                         properly on the screen.
                     </p>
 
-                <h3>Creating our overlay</h3>
+                <h3 id="create-the-overlay">Creating our overlay</h3>
                     <p>In order to create our overlay we need to create a new Window that we will then show on the screen. We can do this using the <code>CreateWindowEx</code> function. According to MSDN, this function creates an "overlapped, pop-up, or child window with an extended style."</p>
                     <p>We'd then want to utilize <code>SetLayeredWindowAttributes</code> which allows us to set the opacity and transparency color keys of our newly created Window. Then we can show our window using <code>ShowWindow</code> with the <strong>SW_SHOW</strong> flag.</p>
                     <p>The function to do this would look similar to this:</p>
@@ -165,7 +165,7 @@ void Overlay::createAndShowOverlay()
 }
                     </code></pre>
 
-                <h3>Initializing Direct3D</h3>
+                <h3 id="initialize-direct3d">Initializing Direct3D</h3>
                     <p>We have to initialize Direct3D 9Ex to create an object which allow us to enumerate and retrieve capabilities of a device.</p>
                     <p>Next, we will go through and interact with a D3D (Direct3D) paramaters structure and set up the paramaters we want for our overlay.</p>
                     <p>Finally, we will create a device, which is how Direct3D communicates with our GPU. Giving it the information we gathered from previous functions along with the parameters we just set.</p>
@@ -190,7 +190,7 @@ void Overlay::Direct3D9XInit(HWND hwnd)
 }
                     </code></pre>
                 
-                <h3>Rendering in Direct3D</h3>
+                <h3 id="render-direct3d">Rendering in Direct3D</h3>
                     <p>The final step of our overlay process, rendering our overlay to the screen.</p>
                     <p>When rendering with Direct3D everything that we are going to render is going to be included between <code>Device->BeginScene()</code> and <br><code>Device->EndScene()</code>.</p>
                     <p>There are so many ways that you can render and draw to a screen and it would be too much to include here. I will include a link to the MSDN where you can see all a wide range of examples of all the things you can draw and make in the references.</p>
@@ -201,14 +201,14 @@ void Overlay::Direct3D9XInit(HWND hwnd)
                     <p>Afterwards our user will see the newly rendered screen and then we will perform cleanup by calling the <code>Clean()</code> function. Which according to MSDN, "Clears one or more surfaces such as a render target, multiple render targets, a stencil buffer, and a depth buffer".</p>
                     <p>Now we have officially rendered our overlay to the screen!</p>
 
-                <h2>Conclusion</h2>
+                <h2 id="conclusion">Conclusion</h2>
                     <p>Now that I have a better understanding on the concept of how creating an overlay for a game cheat works. I will begin to work on creating my own overlay program! It was fun to learn about how much goes into creating an overlay, along with the process that graphic API's play. I hope whoever reads this blog was able to learn something as well!</p>
                     <p>If you have any feedback or want to share what you've created please feel free to reach out! You can contact me through Twitter/X or by the email listed in <a href="../../contact.html">Contacts</a></p>
                     <br>
                     <p>Please take care, take some time to learn something new, and happy game hacking!</p>
                     <p>NitoTech</p>
                 
-                <h3>Additional Resources:</h3>
+                <h2 id="additional-resources">Additional Resources:</h3>
                     <p>Documentation:</p>
                     <a href="https://learn.microsoft.com/en-us/windows/win32/direct3d9/dx9-graphics">MSDN - Direct3D 9 Graphics</a>
                     <br>
@@ -219,8 +219,10 @@ void Overlay::Direct3D9XInit(HWND hwnd)
                     <br>
                     <a href="https://www.youtube.com/watch?v=BIZyxja3Qls">CasualGamer - External Overlay in C++</a>
             </div>
-            <div id="toc">
-                <ul id="toc-list"></ul>
+            <div id=tocContainer>
+                <div id="toc">
+                    <ul id="toc-list"></ul>
+                </div>
             </div>
         </div>
     </body>

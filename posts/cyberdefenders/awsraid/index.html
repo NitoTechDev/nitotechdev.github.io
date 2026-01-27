@@ -34,7 +34,7 @@
                 <h1>AWSRaid - Writeup</h1>
                 <h5>Oct 25, 2025 | Cyberdefenders AWSRaid Lab Walkthrough</h5>
                 <hr>
-                <h2>Introduction</h2>
+                <h2 id="introduction">Introduction</h2>
                     <p>
                       Today, we are going to be looking at AWSRaid. A cyberdefense lab published by <a href="https://cyberdefenders.org/">Cyberdefenders</a>. <br>If you haven't tried out Cyberdefenders, 
                       I highly recommend you check it out! It's a great way to get more acquainted with the defensive side of cybersecurity. Especially if you're used to working primarily on offensive security.
@@ -44,18 +44,18 @@
                     <p><strong>Please hover over any words highlighted in purple to get a description of what they mean!</strong></p>
                     <hr class="divider">
                 
-                <h2>Scenario</h2>
+                <h2 id="scenario">Scenario</h2>
                     <p>
                       Your organization utilizes AWS to host critical data and applications. An incident has been reported that involves unauthorized access to data and potential exfiltration. 
                       The security team has detected unusual activities and needs to investigate the incident to determine the scope of the attack.
                     </p>
                     <hr class="divider">
 
-                <h2>Analysis</h2>
+                <h2 id="Analysis">Analysis</h2>
                     <p>The only kind of events collected in this lab are defined as "<strong>aws:cloudtrail</strong>". Going into this lab, I had never interacted with CloudTrail in the past and don't have a lot of experience with Splunk.</p>
                     <p>Fortunately, I was able to learn a lot about each of them while completing this lab and looking through <a href="https://cyberdefenders.org/walkthroughs/awsraid/">Cyberdefender's Official AWSRaid Walkthrough</a> as well. I will speak more on what all I learned as we go through each question.</p>
 
-                <h3>Q1: Knowing which user account was compromised is essential for understanding the attacker's initial entry point into the environment. What is the username of the compromised user?</h3>
+                <h3 id="Q1">Q1: Knowing which user account was compromised is essential for understanding the attacker's initial entry point into the environment. What is the username of the compromised user?</h3>
                     <p>The first thing we need to find, is the username of the compromised user. The first thing we need to identify is the layout of "aws:cloudtrail" events. So let's do a general query and see what we can find out:</p>
                     <pre><code>
 sourcetype="aws:cloudtrail"
@@ -102,7 +102,7 @@ sourcetype="aws:cloudtrail" eventName="consolelogin" "responseElements.ConsoleLo
                     <hr class="divider">
 
 
-                <h3>Q2: We must investigate the events following the initial compromise to understand the attacker's motives. What is the timestamp for the first access to an S3 object by the attacker?</h3>
+                <h3 id="Q2">Q2: We must investigate the events following the initial compromise to understand the attacker's motives. What is the timestamp for the first access to an S3 object by the attacker?</h3>
                     <p>Now we need to find the first time our bad actor accessed an S3 object using the compromised account. So we need to find out how to filter for S3 objects as well as filter for our compromised used.</p>
                     <p>If you look back at the results of the first query we ran. You may have noticed that the eventSource was set as <strong>s3.amazonaws.com</strong>. If we filter by this, we can see events that interact with S3 buckets. If we then include a filter for our compromised user, we try and identify the intial access by running this query:</p>
                     <pre><code>
@@ -117,7 +117,7 @@ sourcetype="aws:cloudtrail" eventSource="s3.amazonaws.com" "userIdentity.userNam
                     <p>Though blurred in the image above, the listed event will include the first time our compromised account accessed an S3 bucket.</p>
                     <hr class="divider">
 
-                <h3>Q3: Among the S3 buckets accessed by the attacker, one contains a DWG file. What is the name of this bucket?</h3>
+                <h3 id="Q3">Q3: Among the S3 buckets accessed by the attacker, one contains a DWG file. What is the name of this bucket?</h3>
                     <p>This question wants us to find an S3 bucket that was accessed by the attacker and contains a DWG file.</p>
                     <p>I learned during this question that while the general structure for filters is &le;field&ge; = &le;value&ge;. You can also search by putting text between quotes. So now we change our query and search for our compromised account accessing a S3 bucket where the event contains a DWG file like so:</p>
                     <pre><code>
@@ -131,7 +131,7 @@ sourcetype="aws:cloudtrail" eventSource="s3.amazonaws.com" "userIdentity.userNam
                     <p>As you can see above, if we open the <strong>requestParameters</strong>. We can see the <strong>Key</strong> field which contains the name of the .DWG file, and above it we can see the name of the S3 bucket that was accessed. Giving us our answer!</p>
                     <hr class="divider">
 
-                <h3>Q4: We've identified changes to a bucket's configuration that allowed public access, a significant security concern. What is the name of this particular S3 bucket?</h3>
+                <h3 id="Q4">Q4: We've identified changes to a bucket's configuration that allowed public access, a significant security concern. What is the name of this particular S3 bucket?</h3>
                     <p>Now is where the GitHub page I mentioned earlier will come in handy. We need to find an eventName or eventSource that allows us to look at events tied to changes to an S3 bucket that will allow for public access.</p>
                     <p>If you navigate to that eventName list, you can press <strong>ctrl + f</strong> and then search for any keywords that has to do with an S3 bucket, and making it public.</p>
                     <p>I advise you go through and try to find some potential eventName's on your own! However the strategy I used was searching for the word "bucket". This resulted in 38 eventNames coming back.</p>
@@ -148,7 +148,7 @@ sourcetype="aws:cloudtrail" eventSource="s3.amazonaws.com" "userIdentity.userNam
                     <p>Within that event, if we look within the <strong>requestParameters</strong> we can see a bucket name listed. Giving us our answer!</p>
                     <hr class="divider">
 
-                <h3>Q5: Creating a new user account is a common tactic attackers use to establish persistence in a compromised environment. What is the username of the account created by the attacker?</h3>
+                <h3 id="Q5">Q5: Creating a new user account is a common tactic attackers use to establish persistence in a compromised environment. What is the username of the account created by the attacker?</h3>
                     <p>We can use the same approach as question 4 when approaching how to identify what event would represent our bad actor creating an account.</p>
                     <p>So we can navigate back to the GitHub page and search for more keywords. One obvious one we can search with is "<strong>create</strong>". This does however result in 334 results... Maybe we could try and search using "<strong>user</strong>".</p>
                     <p>Though this results in 79 results, it's a lot better than before. Now we can do a quick scan over the listed eventNames to see if anything sticks out.</p>
@@ -164,7 +164,7 @@ sourcetype="aws:cloudtrail" "userIdentity.userName"="helpdesk.luke" eventName="C
                     <p>Within that event we can once again check the <strong>requestParameters</strong> and we will find the username for the account that was created!</p>
                     <hr class="divider">
 
-                <h3>Q6: Following account creation, the attacker added the account to a specific group. What is the name of the group to which the account was added?</h3>
+                <h3 id="Q6">Q6: Following account creation, the attacker added the account to a specific group. What is the name of the group to which the account was added?</h3>
                     <p>We'll rely on the eventName list on last time to try and find an eventName that is tied to adding a user to a group.</p>
                     <p>So let's search for "group" and parse through the results to see if we can see anything that would fit what we're looking for.</p>
                     <p>A few ones that might fit is "AddMembersToGroup", "AddUsersToGroup", "AddUserToGroup", "AddOrUpdateGroups", etc...</p>
@@ -181,7 +181,7 @@ sourcetype="aws:cloudtrail" "userIdentity.userName"="helpdesk.luke" eventName="A
                     <p>Looking within the <strong>requestParameters</strong> we can see the name of the group the created account was added to!</p>
                     <hr class="divider">
 
-                <h2>Conclusion</h2>
+                <h2 id="conclusion">Conclusion</h2>
                     <p>You have now successfully completed the Cyberdefenders AWSRaid lab!</p>
                     <p>I hope this Writeup was able to teach out something or atleast give you another way to approach sovling labs where you're not sure where to start.</p>
                     <p>When there's so much in IT / Cybersecurity to know it can be daunting diving into the unknown, but with enough time and persistence. I personally believe anyone can learn anything!</p>
@@ -190,7 +190,7 @@ sourcetype="aws:cloudtrail" "userIdentity.userName"="helpdesk.luke" eventName="A
                     <p>NitoTech</p>
                 <hr>
 
-                <h2>Additional Resources:</h2>
+                <h2 id="additional-resources">Additional Resources:</h2>
                         <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html">What is AWS CloudTrail?</a>
                         <br><br>
                         <a href="https://cyberdefenders.org/walkthroughs/awsraid/">Cyberdefenders Official AWSRaid Walkthrough</a>
@@ -201,8 +201,10 @@ sourcetype="aws:cloudtrail" "userIdentity.userName"="helpdesk.luke" eventName="A
                         <br><br>
                         <a href="https://gist.github.com/pkazi/8b5a1374771f6efa5d55b92d8835718c?utm_source=chatgpt.com">Pkazi - CloudTrail eventName list</a>
             </div>
-            <div id="toc">
-                <ul id="toc-list"></ul>
+            <div id=tocContainer>
+                <div id="toc">
+                    <ul id="toc-list"></ul>
+                </div>
             </div>
         </div>
     </body>

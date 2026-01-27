@@ -34,7 +34,7 @@
                 <h1>Creating an External Cheat Overlay with Direct3D 9</h1>
                 <h5>Sep 21, 2025 | Direct3D 9 Overlay Code Writeup</h5>
                 <hr>
-                <h2>Introduction</h2>
+                <h2 id="introduction">Introduction</h2>
                     <p>
                         Have you ever wanted to create an overlay for your cheats and wern't sure where to start? Below we will explore how to code an overlay that will work for nearly any game!
                     </p>
@@ -43,11 +43,11 @@
                     </p>
                     <p><strong>Please hover over any words highlighted in purple to get a description of what they mean!</strong></p>
                   
-                <h2>Code Structure</h2>
+                <h2 id="code-structure">Code Structure</h2>
                     <p>Our code will follow a structure similar to this:</p>
                     <img src="../../images/OverlayCodeFlow.png">
 
-                <h2>DWM: What is it and how do we check for it?</h2>
+                <h2 id="DWM">DWM: What is it and how do we check for it?</h2>
                     <p>DWM (Desktop Window Manager) is a Windows service that renders the GUI for windows. It does this through drawing to an off-screen surface within video memory. Then renders the image onto the display.</p>
                     <p>DWM enables us to be able to create our transparent window seamlessly.</p>
 
@@ -67,7 +67,7 @@ void checkDWM()
 }
                     </code></pre>
 
-                <h2>Gathering game window information</h2>
+                <h2 id="gather-window-info">Gathering game window information</h2>
                     <p>
                       In order to gather information on our games screen, we need to first find the screen, and return the handle from it.<br>
                       If we were successful in finding a handle, we can then grab the process ID for the window which we can then use to obtain the games process handle.
@@ -114,7 +114,7 @@ void getGameWindowInfo()
 }
                     </code></pre>
                 
-                <h2>Creating a window class</h2>
+                <h2 id="create-window-class">Creating a window class</h2>
                     <p>
                       In order to use the function <code>CreateWindowEx</code>, we first have to register a class that we will use to set some parameters for our Window.<br>
                       There are too many parameters to explain here, I highly recommend you check out the MSDN for the structure which can be found here: <a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-wndclassexa">WNDCLASSEXA structure</a>
@@ -182,7 +182,7 @@ void createClass(WNDPROC winproc, char* windowName, HINSTANCE hInstance)
                     </code></pre>
                     <p><strong>Depending on how you setup your project you can retrieve hInstance in a variety of ways.</strong> Since I was injecting a DLL that would then create the external overlay, I retrieved hInstance from the DLL attach process.</p>
                 
-                <h2>Create and show the overlay</h2>
+                <h2 id="create-and-show-overlay">Create and show the overlay</h2>
                     <p>
                       Now that we have registered our class, we can create our overlay window as well as show it overtop the games window. As we mentioned earlier, 
                       since we've already identified that DWM is working on our machine, we can utilize <code>DwmExtendFrameIntoClientArea()</code>.
@@ -201,7 +201,7 @@ void createAndShowOverlay(HINSTANCE hInstance)
                     <p><code>createWindowExA()</code> is a finicky function and it will either work perfectly or it will fail and tell you that it failed to create. You can utilize <code>GetLastError()</code> to check the error code that it is returning.</p>
                     <p>During my time creating this program, I ran into issues with the lpClassName and lpWindowName. I recommend debugging your program when you run it and place breakpoints of those lines of code to see what may be causing issues.</p>
 
-                <h2>Initializing DirectX</h2>
+                <h2 id="initializing-directx">Initializing DirectX</h2>
                     <p>Before we are able to start rendering to our screen, we first need to initialize out DirectX so that we can interact with our GPU to render.</p>
                     <p>To do this we'll create an <code>IDirect3D9EX</code> interface. Then we will intialize our <code>D3DPRESENT_PARAMETERS</code> structure and set it's parameters to meet how our overlay will be setup.</p>
                     <p>Finally, we will create our device which will interact with the GPU along with any other additional interfaces we need such as <code>ID3DXLine</code> so that we can draw on our overlay window.</p>
@@ -237,7 +237,7 @@ void Direct3D9XInit(HWND hwnd)
 }
                     </code></pre>
 
-                <h2>Rendering with DirectX</h2>
+                <h2 id="rendering-with-DirectX">Rendering with DirectX</h2>
                     <p>As I mentioned in the concepts article, when we are rendering with Direct3D, we have to include everything we want to render within <code>BeginScene()</code> and <code>EndScene()</code>.</p>
                     <p>For my overlay, my main focus was to make something that works, and then to make it pretty and conventional afterwards.</p>
                     <p>With that in mind, my focus for creating my first iteration of the overlay was to have a way to make the overlay appear and disapeer. As well as create a tiny box that would be able to hold information once I created a font interface to write text.</p>
@@ -280,7 +280,7 @@ void direct3D9XRender()
                     <p>As well you can notice at the bottom we have to call <code>PresentEx()</code> and <code>Clear()</code>. Which are responsible for presenting our rendered screen as well as clearing one or more surfaces, respectively. </p>
 
 
-                <h2>Main code loop</h2>
+                <h2 id="main-code-loop">Main code loop</h2>
                     <p>That was a lot of code! Hopefully most of it made sense. Luckily we are at the end and can finally call all the functions we setup.</p>
                     <p>We will call all our check and initializing functions and then run a while true loop that will continuously run <code>getGameWindowInfo()</code> so that we can continue to move our overlay on top of our screen regardless if we decide to move the game screen's position on our monitor.</p>
 
@@ -308,7 +308,7 @@ int main() {
 
                     </code></pre>
 
-                <h2>Conclusion</h2>
+                <h2 id="conclusion">Conclusion</h2>
                     <p>It was very cool to be able to finally create my own overlay for a cheat. It's something that I've always struggled with in the past and had a hard time grasping exactly how <span class="hover-word">graphic API</span>'s work and how we can use them to draw overtop the game window.</p>
                     <p>Now that I have a better understanding of how we utilize creating a new window that overlaps our game window, then we interact directly with our GPU to render graphics onto the transparent screen. We are able to create an overlay that depending on how you implment it, gives us the ability to display information from the game.</p>
                     <p>I hope you were able to learn something from this post! It's my first time trying to explain how code works and I'm not sure how it came across so please feel free to let me know of anything I could improve!</p>
@@ -318,7 +318,7 @@ int main() {
                     <p>NitoTech</p>
 
 
-                <h2>Additional Resources:</h2>
+                <h2 id="additional-resources">Additional Resources:</h2>
                     <p>Documentation:</p>
                     <a href="https://learn.microsoft.com/en-us/windows/win32/direct3d9/primitives">MSDN - Primitives (Direct3D 9 Graphics)</a>
                     <br>
@@ -329,8 +329,10 @@ int main() {
                     <br>
                     <a href="https://www.youtube.com/watch?v=BIZyxja3Qls">CasualGamer - External Overlay in C++</a>
             </div>
-            <div id="toc">
-                <ul id="toc-list"></ul>
+            <div id=tocContainer>
+                <div id="toc">
+                    <ul id="toc-list"></ul>
+                </div>
             </div>
         </div>
     </body>

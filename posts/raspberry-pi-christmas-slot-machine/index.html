@@ -34,7 +34,7 @@
                 <h1>Raspberry Pi Christmas Slot Machine</h1>
                 <h5>Dec 28, 2025 | Christmas themed slot machine hosted on a Raspberry Pi</h5>
                 <hr>
-                <h2>Introduction</h2>
+                <h2 id="introduction">Introduction</h2>
                     <p>
                       Have you ever wanted to create your own slot machine? and maybe you've wanted to create a physical project utilizing a Raspberry Pi. Those were some of the thoughts I was having when I started creating a Christmas themed slot machine for 
                       my families yearly Christmas Eve party. Every year we have a game that someone in the family creates and in past years it has been physical games such as custom made beer pong, skee-ball and more. This year I wanted to take charge of making
@@ -45,7 +45,7 @@
                     <hr class="divider">
 
 
-                <h2>Software</h2>
+                <h2 id="software">Software</h2>
                     <p>To start, lets talk about how the code was written for the Slot Machine. I utilized <span class="hover-word">Pygame</span> in order to write the game. Pygame alone covers about 95% of all the coding that is involved with making this game in Python and is definitely something I recommend checking out if you're interested in making a game as well.</p>
                     <p>Huge shoutout to <a href="https://www.youtube.com/@NotaSWE">Not a Software Engineer</a>. When I first started, I watched a video they had created on making a slot machine in Python. This video covers how slot machines work in general, not just in Python. As well as what kind of things we need to utilize in order to simulate a slot machine. Which layed the foundation for my own project.</p>
                     <p>Once I had a solid foundation of how Pygame and slot machines worked. I began designing my background, fonts, and slot designs. I utilized Aseprite to create pixel art for the game. You can find it on Steam for less than $10 or use any other software to create art that you like.</p>
@@ -75,7 +75,7 @@
                     <p>Hopefully these images help paint a picture of how the game looked and flowed. Below I will speak on the hardware setup I had running for this.</p>
                     <hr class="divider">
                 
-                <h2>Hardware</h2>
+                <h2 id="hardware">Hardware</h2>
                     <p>After all the code was written I ported it over to the hardware and began my own personal headache which was getting it to work physically. I will list out all the issues I ran into below so that hopefully if you face any of these issues you wont spend hours fixing them like I did.</p>
                     <p>Main hardware used:</p>
                     <ol>
@@ -97,7 +97,7 @@
 
                     <p>A bit of a long list but that should cover just about everything you need for the project.</p>
 
-                <h3>Raspberry Pi</h3>
+                <h3 id="rasperry-pi">Raspberry Pi</h3>
                     <p>The first thing we need to do is flash our Micro-SD card with the most recent installation of Raspberry pi OS. There are probably other ones you can use but I am not familiar with them and this is what I choose: <a href="imager">https://www.raspberrypi.com/software/</a></p>
                     <p>Afterwards, we can insert the Micro-SD card. Then plug in our keyboard, monitor, mouse, and power cable and power on our Raspberry Pi. Depending on how you ran the installer you may have some initial setup you have to go through but outside of that you should be good.</p>
                     <p>I was unable to tell if the issue I'm about to cover is for the Hoyound 7 inch monitor specifically. However, if you are seeing an issue where your resolution isn't setup properly. Once booted up, you need to go into <strong>/boot/firmware/config.txt</strong> and change this line:</p>
@@ -108,13 +108,13 @@ dtoverlay=vc4-kms-v3d -> dtoverlay=vc4-fkms-v3d
                     <p>Outside of that you can then proceed to port the code into your Pi whether by USB or connecting to your email and downloading there. Whichever works best for you!</p>
                     <p>You'll need to setup a venv environment and pip install Pygame and Pyserial so that the code will run properly and make sure that when you run your program you are running it from within the venv environment. After that, we should be done with the Raspberry Pi setup.</p>
                 
-                <h3>Arduino</h3>
+                <h3 id="arduino">Arduino</h3>
                     <p>Last thing we have to setup now is the arduino. To start you'll want to make sure you have your USB to Serial cable so that you can connect the Arduino to your computer. Then install the <a href="https://www.arduino.cc/en/software/">Arduino application</a> and open up the IDE so that you can write the code that will interact with the Arduino.</p>
                     <p>Please keep in mind, that while not listed here, the code will be in my GitHub which will be linked at the bottom of this article.</p>
                     <p>Upload the software to the Arduino then you can assemble the break beam sensors on the Arduino. I followed a great article from Adafruit on this which you can find here: <a href="https://learn.adafruit.com/ir-breakbeam-sensors/arduino">Adafruit: IR Break Beam</a></p>
                     <p>The only thing you may need to change in the actual slot machine code itself is the directory or name for the Serial port connected to the Arduino.</p>
 
-                <h3>Finishing touches</h3>
+                <h3 id="finishing-touches">Finishing touches</h3>
                     <p>Outside of that, after you put together the Arduino and your RaspberryPi is setup, you can take the USB to Serial cable and plug them into the respective devices and launch the program.</p>
                     <p>At this point, the program should launch as expected and not throw any errors. If errors do come up please inspect the errors and debug as per the error message or online forums on the error.</p>
                     <p>Keep in mind that the monitor is touch screen so once launched, you shouldn't need a keyboard and mouse plugged in to utilize the game. If you run into a weird issue with the screen not detecting input, simply plug in the mouse touch the screen and then you can unplug the mouse.</p>
@@ -125,7 +125,7 @@ dtoverlay=vc4-kms-v3d -> dtoverlay=vc4-fkms-v3d
                 <img src="../../images/christmas-project/physical.png">
 
 
-                <h2>Conclusion</h2>
+                <h2 id="conclusion">Conclusion</h2>
                     <p>That completes the Christmas Themed Slot Machine that I created this holiday season. This project took a lot longer than I initially anticipated. Making something that multiple people will be using and are supposed to find enjoyable was a lot harder than I suspected.</p>
                     <p>Designing an application that can fit a whole bunch of use cases, designing challenges for players that can't do physical activities, and learning how to make a game took a bunch of time and seeing it through was challenging.</p>
                     <p>However, with that in mind it is something that I look back on and am super proud of myself for taking on, and even more proud that I saw it all the way through as there were so many times I tried to convince myself that it wasn't going to work.</p>
@@ -135,17 +135,19 @@ dtoverlay=vc4-kms-v3d -> dtoverlay=vc4-fkms-v3d
                     <p>NitoTech</p>
                 <hr>
 
-                <h2>GitHub Link to the Project</h2>
+                <h2 id="github">GitHub Link to the Project</h2>
                     <a href="https://github.com/NitoTechDev/christmas-slot-machine">Christmas Slot Machine</a>
                     <p>Within <strong>Main.py</strong> and <strong>Machine.py</strong> you'll need to go through and uncomment all the comments that are aligned with reading from the Arduino. They are commented out so that you can work on the code without needing to have it plugged in.</p>
 
-                <h2>Additional Resources:</h2>
+                <h2 id="additional-resources">Additional Resources:</h2>
                         <a href="https://www.youtube.com/watch?v=hnTrectlTxM&t=1s">Not a Software Engineer Youtube Video</a>
                         <br><br>
                         
             </div>
-            <div id="toc">
-                <ul id="toc-list"></ul>
+            <div id=tocContainer>
+                <div id="toc">
+                    <ul id="toc-list"></ul>
+                </div>
             </div>
         </div>
     </body>
