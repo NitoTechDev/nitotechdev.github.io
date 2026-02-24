@@ -19,7 +19,7 @@ let tocDisplayedHeadings = []
 
 document.addEventListener("DOMContentLoaded", () => {
     const blogContainer = document.querySelector(".blog-main"); // Makes it so we only get the headings from within .blog-main
-    const blogHeadings = blogContainer.querySelectorAll("h1, h2, h3, h4"); // Gets the h1 - h3 headings. 
+    const blogHeadings = blogContainer.querySelectorAll("h1, h2, h3, h4, h5"); // Gets the h1 - h3 headings. 
     createTOC(blogHeadings);
     renderTOC(tocDisplayedHeadings);
 })
@@ -40,8 +40,9 @@ function createTOC(headings) {
 function renderTOC(displayedHeadings) {
     const toc = document.getElementById("toc");
     const tocListContainer = document.getElementById("toc-list");
-    let mostRecentUL = tocListContainer;
-    let mostRecentSubUL = null;
+    let mostRecentH2UL = tocListContainer;
+    let mostRecentH3UL = null;
+    let mostRecentH4UL = null;
     let mostRecentDetails = null;
     displayedHeadings.forEach((heading, index) => {
         const li = document.createElement("li");
@@ -64,42 +65,61 @@ function renderTOC(displayedHeadings) {
                     link.href = `#${heading.id}`;
                     summary.appendChild(link);
                     mostRecentDetails.appendChild(summary);
-                    mostRecentUL = document.createElement("ul");
-                    mostRecentDetails.appendChild(mostRecentUL);
+                    mostRecentH2UL = document.createElement("ul");
+                    mostRecentDetails.appendChild(mostRecentH2UL);
                 } else {
-                    mostRecentUL = tocListContainer
+                    mostRecentH2UL = tocListContainer
                     link.textContent = heading.text;
                     link.href = `#${heading.id}`;
                     li.appendChild(link);
-                    mostRecentUL.appendChild(li);
+                    mostRecentH2UL.appendChild(li);
                 }
                 break;
             case "3":
                 try { if (displayedHeadings[index + 1].level === "4") {hasSubheading = true} else { hasSubheading = false} } catch (TypeError) {hasSubheading = false}
                 if (hasSubheading) {
-                    console.log("This heading 3 has a subheading of 4.")
                     mostRecentDetails = document.createElement("details");
                     const summary = document.createElement("summary");
-                    mostRecentUL.appendChild(li);
+                    mostRecentH2UL.appendChild(li);
                     li.appendChild(mostRecentDetails);
                     link.textContent = heading.text;
                     link.href = `#${heading.id}`;
                     summary.appendChild(link);
                     mostRecentDetails.appendChild(summary);
-                    mostRecentSubUL = document.createElement("ul");
-                    mostRecentDetails.appendChild(mostRecentSubUL);
+                    mostRecentH3UL = document.createElement("ul");
+                    mostRecentDetails.appendChild(mostRecentH3UL);
                 } else {
                     link.textContent = heading.text;
                     link.href = `#${heading.id}`;
                     li.appendChild(link);
-                    mostRecentUL.appendChild(li);
+                    mostRecentH2UL.appendChild(li);
                 }
                 break;
             case "4":
+                try { if (displayedHeadings[index + 1].level === "5") {hasSubheading = true} else { hasSubheading = false} } catch (TypeError) {hasSubheading = false}
+                if (hasSubheading) {
+                    mostRecentDetails = document.createElement("details");
+                    const summary = document.createElement("summary");
+                    mostRecentH3UL.appendChild(li);
+                    li.appendChild(mostRecentDetails);
+                    link.textContent = heading.text;
+                    link.href = `#${heading.id}`;
+                    summary.appendChild(link);
+                    mostRecentDetails.appendChild(summary);
+                    mostRecentH4UL = document.createElement("ul");
+                    mostRecentDetails.appendChild(mostRecentH4UL);
+                } else {
+                    link.textContent = heading.text;
+                    link.href = `#${heading.id}`;
+                    li.appendChild(link);
+                    mostRecentH3UL.appendChild(li);
+                }
+                break;
+            case "5":
                 link.textContent = heading.text;
                 link.href = `#${heading.id}`;
                 li.appendChild(link);
-                mostRecentSubUL.appendChild(li);
+                mostRecentH4UL.appendChild(li);
                 break;
         }
   });

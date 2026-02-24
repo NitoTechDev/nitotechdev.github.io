@@ -1,5 +1,12 @@
 const posts = [
     {
+        "title": "Fuzzing d8 with Dharma",
+        "description": "Learn how to install and fuzz d8",
+        "date": "Feb 24, 2026",
+        "link": "./posts/fuzzing-d8-exe-with-dharma",
+        "image": "./images/dharma-fuzz/PS-fuzzer.png"
+    },
+    {
         "title": "What is Fuzzing - Concept Study",
         "description": "Concept study on Fuzzing",
         "date": "Jan 11, 2026",
@@ -59,46 +66,95 @@ const posts = [
 
 
 document.addEventListener("DOMContentLoaded", () => {
+    bHomePage = false;
+    if (document.getElementById("home-row") !== null) {bHomePage = true}; 
     const blogPostArea = document.getElementById("main");
-    for (let post in posts) {
-        console.log(post);
-        const blogPost = document.createElement("div");
-        blogPost.className = "big-posts";
-
-        const blogPostTitle = document.createElement("div");
-        blogPostTitle.className = "big-posts-title";
-
-        const blogTitle = document.createElement("h2");
-        const blogTitleLink = document.createElement("a");
-        blogTitleLink.textContent = posts[post].title;
-        blogTitleLink.setAttribute("href", posts[post].link);
-        blogTitle.append(blogTitleLink);
-        blogPostTitle.append(blogTitle);
-
-        const blogShortDesc = document.createElement("h5");
-        blogShortDesc.textContent = posts[post].description;
-        blogShortDesc.className = "big-posts-shortDesc";
-        blogPostTitle.append(blogShortDesc);
-
-        const blogDate = document.createElement("h5");
-        blogDate.textContent = posts[post].date;
-        blogDate.className = "big-posts-date";
-        blogPostTitle.append(blogDate);
-
-        const blogPostImg = document.createElement("div");
-        blogPostImg.className = "big-posts-img";
-
-        const blogPhoto = document.createElement("img");
-        blogPhoto.setAttribute("src", posts[post].image);
-        blogPostImg.append(blogPhoto);
-
-        blogPost.append(blogPostTitle);
-        blogPost.append(blogPostImg);
-
-        const spacer = document.createElement("br");
-
-        blogPostArea.append(blogPost);
-        //blogPostArea.append(spacer);
-    }
+    renderPosts(blogPostArea, bHomePage)
 
 })
+
+function renderPosts(blogPostArea, bHomePage) {
+    if (bHomePage) {
+        for (let i = 0; i < 6; i++) {
+            let post = posts[i];
+            const blogPost = document.createElement("div");
+            blogPost.className = "big-posts";
+
+            const blogPostTitle = document.createElement("div");
+            blogPostTitle.className = "big-posts-title";
+
+            const blogTitle = document.createElement("h2");
+            const blogTitleLink = document.createElement("a");
+            blogTitleLink.textContent = post.title;
+            blogTitleLink.setAttribute("href", post.link);
+            blogTitle.append(blogTitleLink);
+            blogPostTitle.append(blogTitle);
+
+            const blogShortDesc = document.createElement("h5");
+            blogShortDesc.textContent = post.description;
+            blogShortDesc.className = "big-posts-shortDesc";
+            blogPostTitle.append(blogShortDesc);
+
+            const blogDate = document.createElement("h5");
+            blogDate.textContent = post.date;
+            blogDate.className = "big-posts-date";
+            blogPostTitle.append(blogDate);
+
+            const blogPostImg = document.createElement("div");
+            blogPostImg.className = "big-posts-img";
+
+            const blogPhoto = document.createElement("img");
+            blogPhoto.setAttribute("src", post.image);
+            blogPostImg.append(blogPhoto);
+
+            blogPost.append(blogPostTitle);
+            blogPost.append(blogPostImg);
+
+            const spacer = document.createElement("br");
+
+            blogPostArea.append(blogPost);
+            //blogPostArea.append(spacer);
+        }
+    } else {
+        for (let post in posts) {
+            const blogPost = document.createElement("div");
+            blogPost.className = "big-posts";
+
+            const blogPostTitle = document.createElement("div");
+            blogPostTitle.className = "big-posts-title";
+
+            const blogTitle = document.createElement("h2");
+            const blogTitleLink = document.createElement("a");
+            blogTitleLink.textContent = posts[post].title;
+            blogTitleLink.setAttribute("href", posts[post].link);
+            blogTitle.append(blogTitleLink);
+            blogPostTitle.append(blogTitle);
+
+            const blogShortDesc = document.createElement("h5");
+            blogShortDesc.textContent = posts[post].description;
+            blogShortDesc.className = "big-posts-shortDesc";
+            blogPostTitle.append(blogShortDesc);
+
+            const blogDate = document.createElement("h5");
+            blogDate.textContent = posts[post].date;
+            blogDate.className = "big-posts-date";
+            blogPostTitle.append(blogDate);
+
+            const blogPostImg = document.createElement("div");
+            blogPostImg.className = "big-posts-img";
+
+            const blogPhoto = document.createElement("img");
+            blogPhoto.setAttribute("src", posts[post].image);
+            blogPostImg.append(blogPhoto);
+
+            blogPost.append(blogPostTitle);
+            blogPost.append(blogPostImg);
+
+            const spacer = document.createElement("br");
+
+            blogPostArea.append(blogPost);
+            //blogPostArea.append(spacer);
+        }
+    }
+    
+}

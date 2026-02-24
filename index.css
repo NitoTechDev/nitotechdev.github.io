@@ -71,17 +71,23 @@ body {
 }
 
 .side {
-    flex: 25%;
+    flex: 20%;
     background-color: #f1f1f1;
     padding: 20px;
-    max-width: 387px;
+    max-width: 387px; /*387px*/
 }
 
 .main {  
-    flex: 75%;
+    flex: 40%;
     background-color: white;
     padding: 20px;
-    max-width: 790px;
+    
+}
+
+.toc-info {
+    flex: 20%;
+    background-color: #f1f1f1;
+    padding: 20px;
 }
 
 /* Side column for blog posts */
@@ -371,6 +377,57 @@ code {
 }
 
 /* --------------------------------------------- */
+/* Hover Words */
+
+/* Style the button that is used to open and close the collapsible content */
+.collapsible {
+  background-color: #555555;
+  /* color: #444;  */
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  padding-bottom: 14px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.collapsible:after {
+  content: '+'; /* Unicode character for "plus" sign (+) */
+  font-size: 20px;
+  color: white;
+  float: right;
+}
+
+.active:after {
+  content: "-"; /* Unicode character for "minus" sign (-) */
+}
+
+/* Style the collapsible content. Note: hidden by default */
+.collapsible-content {
+  padding: 0 18px;
+  background-color: #f1f1f1;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+
+.collapsible-heading{
+    margin: 0;
+    padding: 0;
+    float: left;
+}
+
+.collapsible h3{
+    margin: 0;
+    padding: 0;
+    float: left;
+}
+
+/* --------------------------------------------- */
 /* Responsive Layout */
 
 /* Responsive layout - when the screen is less than 1150px wide, change the flex width for both the blog side and blog main to adjust for words being too close */
@@ -403,15 +460,10 @@ code {
     }
 }
 
-@media screen and (min-width: 2600px) {
+@media screen and (min-width: 2000px) {
     .row {
-        max-width: 2600px;
+        max-width: 2000px;
         margin: auto;
     }
-}
-
-#home-row {
-    max-width: 1400px;
-    margin: auto;
 }
 /* --------------------------------------------- */
