@@ -1,5 +1,12 @@
 const posts = [
     {
+        "title": "Game Hacking | Pattern Scanning",
+        "description": "Pattern Scanning... What is it, how does it work, and how can you make your own?",
+        "date": "Mar 29, 2026",
+        "link": "./posts/pattern-scanning",
+        "image": "./images/pattern-scanner/logo.png"
+    },
+    {
         "title": "Fuzzing d8 with Dharma",
         "description": "Learn how to install and fuzz d8",
         "date": "Feb 24, 2026",
